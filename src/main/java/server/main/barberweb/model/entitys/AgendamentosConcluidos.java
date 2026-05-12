@@ -1,23 +1,21 @@
 package server.main.barberweb.model.entitys;
 
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "agendamentos")
-public class Agendamento {
+@Table(name = "agendamentos_concluidos")
+public class AgendamentosConcluidos {
 
     @Getter
     @Setter
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Getter
@@ -43,4 +41,7 @@ public class Agendamento {
     @Getter
     @Setter
     private boolean ativa;
+
+    @Getter @Setter
+    private LocalDate dataFinalizacao;
 }

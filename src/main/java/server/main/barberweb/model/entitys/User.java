@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.NumberFormat;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @Getter @Setter
