@@ -17,5 +17,7 @@ public class AgendamentoDto {
 
     private LocalTime horario;
 
+    private boolean disponivel;
+
     private boolean ativa;
 }
