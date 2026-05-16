@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.AgendamentoDto;
+import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.AgendamentoRepository;
@@ -27,6 +28,7 @@ public class UserService {
     private AgendamentoDto convertScheduleDto(Agendamento agendamento) {
         AgendamentoDto dto = new AgendamentoDto();
 
+        dto.setId(agendamento.getId());
         dto.setHorario(agendamento.getHorario());
         dto.setData(agendamento.getData());
         dto.setProfissional(agendamento.getProfissional());
@@ -53,7 +55,17 @@ public class UserService {
         return dtoList;
     }
 
-    public
+    public String definirHorario(Long id, UserDto dto) {
+        Agendamento agendamento  = agendamentoRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("The Schedule is no longer available or doesn't exist!"));
+
+        agendamento.setCliente(dto.getUsername());
+        agendamento.setDisponivel(false);
+        agendamento.setAtiva(true);
+
+        return ("Your Schedule is now available");
+    }
+
 
 
 }

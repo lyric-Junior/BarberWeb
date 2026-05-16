@@ -2,6 +2,8 @@ package server.main.barberweb.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.AgendamentoRepository;
@@ -10,6 +12,7 @@ import server.main.barberweb.repository.UserRepository;
 
 import java.util.List;
 
+@Service
 public class AdminTools {
 
     @Autowired
@@ -22,6 +25,29 @@ public class AdminTools {
 
     public List<User> listarUsuarios() {
         return userRepo.findAll();
+    }
+
+    public String editarUsuario(UserDto dto) {
+        User user = userRepo.findById(dto.getId())
+                .orElseThrow(() -> new RuntimeException("The user could not be found!"));
+
+        user.setEmail(dto.getEmail());
+        user.setUsername(dto.getUsername());
+        user.setNumero(dto.getNumero());
+        user.setId(dto.getId());
+
+        userRepo.save(user);
+
+        return ("The user was edited successfully!");
+    }
+
+    public String deletarUsuario(Long id) {
+        User user = userRepo.findById(id)
+                        .orElseThrow(() -> new RuntimeException("The user could not be found!"));
+
+        userRepo.deleteById(id);
+
+        return ("User deleted sucessfully!");
     }
 
     //AGENDAMENTO SECTION
