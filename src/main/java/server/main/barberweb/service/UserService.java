@@ -3,6 +3,7 @@ package server.main.barberweb.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.AgendamentoDto;
 import server.main.barberweb.model.dtos.UserDto;
@@ -24,6 +25,9 @@ public class UserService {
 
     @Autowired
     private AgendamentoRepository agendamentoRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private AgendamentoDto convertScheduleDto(Agendamento agendamento) {
         AgendamentoDto dto = new AgendamentoDto();
@@ -63,7 +67,18 @@ public class UserService {
         agendamento.setDisponivel(false);
         agendamento.setAtiva(true);
 
-        return ("Your Schedule is now available");
+        return ("Your scheduling is done!");
+    }
+
+    public String registrarUsuario(User dto) {
+        User user = new User();
+
+        String passwordHash = passwordEncoder.encode(dto.getPassword());
+        String cpf
+
+        user.setEmail(dto.getEmail());
+        user.setNumero(dto.getNumero());
+        user.setCpf();
     }
 
 

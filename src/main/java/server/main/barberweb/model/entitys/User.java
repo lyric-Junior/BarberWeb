@@ -1,8 +1,6 @@
 package server.main.barberweb.model.entitys;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -12,20 +10,20 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.NumberFormat;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "users")
 public class User {
 
     @Getter @Setter
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Getter @Setter
     @Max(20)
     private String username;
-
-    @Getter @Setter
-    private boolean admin;
 
     @Getter @Setter
     @Max(16)
@@ -43,4 +41,8 @@ public class User {
     @Email
     @Getter @Setter
     private String email;
+
+    @Getter @Setter
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

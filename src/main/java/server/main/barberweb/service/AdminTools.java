@@ -1,5 +1,6 @@
 package server.main.barberweb.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -86,15 +87,6 @@ public class AdminTools {
         }
 
         return agendamentoRepo.findAll(spec);
-    }
-
-    //ADMIN ADMIN ADMIN ADMIN
-    public String tornarAdmin(Long id, boolean admin) {
-        User user = userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User could not be found!"));
-        user.setAdmin(admin);
-
-        return ("User " + user.getUsername() + " is now admin!");
     }
 
     public String cancelarAgendamento(Long id) {
