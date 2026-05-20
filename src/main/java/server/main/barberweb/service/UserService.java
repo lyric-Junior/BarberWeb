@@ -74,11 +74,11 @@ public class UserService {
         User user = new User();
 
         String passwordHash = passwordEncoder.encode(dto.getPassword());
-        String cpf
 
         user.setEmail(dto.getEmail());
         user.setNumero(dto.getNumero());
-        user.setCpf();
+
+        return ("por enquanto");
     }
 
 

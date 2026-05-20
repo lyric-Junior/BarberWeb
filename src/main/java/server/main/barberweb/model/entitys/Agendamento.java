@@ -1,13 +1,11 @@
 package server.main.barberweb.model.entitys;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity

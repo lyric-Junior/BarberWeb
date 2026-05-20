@@ -3,6 +3,9 @@ package server.main.barberweb.service.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import server.main.barberweb.model.dtos.login.LoginRequest;
+import server.main.barberweb.model.entitys.User;
+import server.main.barberweb.repository.UserRepository;
 import server.main.barberweb.service.security.jwt.JwtService;
 
 /*
@@ -25,18 +28,13 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private UserRepository userRepo;
+
     /*
      * Fluxo de login.
      */
-    public void login(
-            String email,
-            String password
-    ) {
-
-        /*
-         * Buscar usuário.
-         */
-
+    public void login(LoginRequest request) {
+        User user =  userRepo.findByE
         /*
          * Validar senha usando BCrypt.
          */
