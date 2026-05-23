@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import server.main.barberweb.model.dtos.AgendamentoDto;
 import server.main.barberweb.model.dtos.UserDto;
+import server.main.barberweb.service.AgendamentoService;
 import server.main.barberweb.service.UserService;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService service;
+    private AgendamentoService service;
 
     @PostMapping("/definirHorario/{id}")
     public String definirHorario(@RequestParam Long id, @RequestBody @Valid UserDto user, Authentication auth) {

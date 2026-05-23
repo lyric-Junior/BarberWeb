@@ -7,13 +7,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.AgendamentoDto;
 import server.main.barberweb.model.dtos.UserDto;
+import server.main.barberweb.model.dtos.register.RegRequest;
+import server.main.barberweb.model.dtos.register.RegResponse;
 import server.main.barberweb.model.entitys.Agendamento;
+import server.main.barberweb.model.entitys.Role;
 import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.AgendamentoRepository;
 import server.main.barberweb.repository.AgendamentoSpecification;
 import server.main.barberweb.repository.UserRepository;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,58 +33,80 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private AgendamentoDto convertScheduleDto(Agendamento agendamento) {
+    private AgendamentoDto convertAgendamentoDto(Agendamento agendamento) {
         AgendamentoDto dto = new AgendamentoDto();
 
-        dto.setId(agendamento.getId());
+        dto.setDisponivel(agendamento.isDisponivel());
         dto.setHorario(agendamento.getHorario());
         dto.setData(agendamento.getData());
         dto.setProfissional(agendamento.getProfissional());
-        dto.setAtiva(agendamento.isAtiva());
-        dto.setDisponivel(agendamento.isDisponivel());
 
         return dto;
     }
 
-    public List<AgendamentoDto> listarParaMim() {
-        Specification<Agendamento> spec = (root, query, criteriaBuilder) ->
-                criteriaBuilder.conjunction();
+    //USERS SECTION
 
-        spec.and(AgendamentoSpecification.disponivelEquals(true));
-
-        List<AgendamentoDto> dtoList = agendamentoRepo.findAll(spec).stream()
-                .map(this::convertScheduleDto)
-                .toList(); //Dá pra escrever somente toList em vez de collect(Collectors.toList())
-
-        if (dtoList.isEmpty()) {
-            throw new RuntimeException("There are no available scheduling now!");
-        }
-
-        return dtoList;
+    public List<User> listarUsuarios() {
+        return userRepo.findAll();
     }
 
-    public String definirHorario(Long id, UserDto dto) {
-        Agendamento agendamento  = agendamentoRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("The Schedule is no longer available or doesn't exist!"));
-
-        agendamento.setCliente(dto.getUsername());
-        agendamento.setDisponivel(false);
-        agendamento.setAtiva(true);
-
-        return ("Your scheduling is done!");
-    }
-
-    public String registrarUsuario(User dto) {
-        User user = new User();
-
-        String passwordHash = passwordEncoder.encode(dto.getPassword());
+    public String editarUsuario(UserDto dto) {
+        User user = userRepo.findById(dto.getId())
+                .orElseThrow(() -> new RuntimeException("The user could not be found!"));
 
         user.setEmail(dto.getEmail());
+        user.setUsername(dto.getUsername());
         user.setNumero(dto.getNumero());
+        user.setId(dto.getId());
 
-        return ("por enquanto");
+        userRepo.save(user);
+
+        return ("The user was edited successfully!");
+    }
+
+    public String deletarUsuario(UUID id) {
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("The user could not be found!"));
+
+        userRepo.deleteById(id);
+
+        return ("User deleted sucessfully!");
     }
 
 
 
+    public RegResponse cadastrarUsuario(RegRequest request) {
+        //Verificar se o usuário ja existe
+        List<User> listExists = userRepo.findByUsername(request.getUsername());
+
+        //Seguindo essa regra nenhum nome pode ser igual, então tem que ser um nome maior.
+
+        if (!listExists.isEmpty()) {
+            throw new RuntimeException("The user already exists!");
+        }
+
+        User user = new User();
+
+        //Hash da senha
+        String senhaHash = passwordEncoder.encode(request.getPassword());
+
+        //Definindo usuário
+        user.setNumero(request.getNumero());
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setRole(Role.USER);
+        user.setPassword(senhaHash);
+
+        userRepo.save(user);
+
+        //Montamos a response
+        RegResponse response = new RegResponse();
+
+        response.setRole(user.getRole());
+        response.setUsername(user.getUsername());
+        response.setMessage("Usuário cadastrado com sucesso!");
+
+
+        return (response);
+    }
 }

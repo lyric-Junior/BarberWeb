@@ -1,17 +1,15 @@
 package server.main.barberweb.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.AgendamentoRepository;
-import server.main.barberweb.repository.AgendamentoSpecification;
 import server.main.barberweb.repository.UserRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AdminTools {
@@ -42,7 +40,7 @@ public class AdminTools {
         return ("The user was edited successfully!");
     }
 
-    public String deletarUsuario(Long id) {
+    public String deletarUsuario(UUID id) {
         User user = userRepo.findById(id)
                         .orElseThrow(() -> new RuntimeException("The user could not be found!"));
 
@@ -52,42 +50,7 @@ public class AdminTools {
     }
 
     //AGENDAMENTO SECTION
-    public List<Agendamento> listarAgendamentos() {
-        return agendamentoRepo.findAll();
-    }
 
-    //SPECIFICATION JpaRepository
-    public List<Agendamento> listarPorFiltro(String cliente, String profissional, boolean disponivel) {
-
-        Specification<Agendamento> spec = (root, query, criteriaBuilder) ->
-                criteriaBuilder.conjunction();
-
-        if (cliente != null & !cliente.isBlank()) {
-            spec = spec.and(
-                    AgendamentoSpecification.clienteContains(cliente)
-            );
-        }
-
-        if (profissional != null & !profissional.isBlank()) {
-            spec = spec.and(
-                    AgendamentoSpecification.profissionalEquals(profissional)
-            );
-        }
-
-        if (disponivel) {
-            spec = spec.and(
-                    AgendamentoSpecification.ativaEquals(true)
-            );
-        }
-
-        if (!disponivel) {
-            spec = spec.and(
-                    AgendamentoSpecification.ativaEquals(false)
-            );
-        }
-
-        return agendamentoRepo.findAll(spec);
-    }
 
     public String cancelarAgendamento(Long id) {
         Agendamento vaga = agendamentoRepo.findById(id)
