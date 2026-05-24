@@ -2,23 +2,17 @@ package server.main.barberweb.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import server.main.barberweb.model.dtos.AgendamentoDto;
 import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.dtos.register.RegRequest;
 import server.main.barberweb.model.dtos.register.RegResponse;
-import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.Role;
 import server.main.barberweb.model.entitys.User;
-import server.main.barberweb.repository.AgendamentoRepository;
-import server.main.barberweb.repository.AgendamentoSpecification;
 import server.main.barberweb.repository.UserRepository;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,21 +22,7 @@ public class UserService {
     private UserRepository userRepo;
 
     @Autowired
-    private AgendamentoRepository agendamentoRepo;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
-
-    private AgendamentoDto convertAgendamentoDto(Agendamento agendamento) {
-        AgendamentoDto dto = new AgendamentoDto();
-
-        dto.setDisponivel(agendamento.isDisponivel());
-        dto.setHorario(agendamento.getHorario());
-        dto.setData(agendamento.getData());
-        dto.setProfissional(agendamento.getProfissional());
-
-        return dto;
-    }
 
     //USERS SECTION
 

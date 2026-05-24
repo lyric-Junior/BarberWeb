@@ -34,7 +34,6 @@ public class DevBoootstrap implements CommandLineRunner {
         user.setPassword(System.getenv("DEV_PASSWORD"));
         user.setRole(Role.DEVELOPER);
         user.setEmail(System.getenv("DEV_EMAIL"));
-        user.set
         userRepo.save(user);
     }
 
