@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.dtos.register.RegRequest;
 import server.main.barberweb.model.dtos.register.RegResponse;
+import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.Role;
 import server.main.barberweb.model.entitys.User;
+import server.main.barberweb.repository.AgendamentoRepository;
 import server.main.barberweb.repository.UserRepository;
 
 import java.util.List;
@@ -20,6 +22,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private AgendamentoRepository agendamentoRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -53,15 +58,30 @@ public class UserService {
         return ("User deleted sucessfully!");
     }
 
+    public String definirHorario(UserDto dto, Long scheduleId) {
+        Agendamento schedule = agendamentoRepo.findById(scheduleId)
+                .orElseThrow(() -> new RuntimeException("The schedule could not be found!"));
+
+        if (!schedule.isAtiva() || schedule.isDisponivel()) {
+            throw new RuntimeException("The schedule is not available!");
+        }
+
+        schedule.setDisponivel(false);
+        schedule.setAtiva(true);
+        schedule.setCliente(dto.getUsername());
+
+        return ("Your schedule is already setted up!");
+    }
+
 
 
     public RegResponse cadastrarUsuario(RegRequest request) {
         //Verificar se o usuário ja existe
-        List<User> listExists = userRepo.findByUsername(request.getUsername());
+        User userStored = userRepo.findOneByUsername(request.getUsername());
 
         //Seguindo essa regra nenhum nome pode ser igual, então tem que ser um nome maior.
 
-        if (!listExists.isEmpty()) {
+        if (userStored.getUsername().equals(request.getUsername())) {
             throw new RuntimeException("The user already exists!");
         }
 

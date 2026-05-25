@@ -1,7 +1,10 @@
 package server.main.barberweb.service.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import server.main.barberweb.model.entitys.RefreshToken;
+import server.main.barberweb.repository.RefreshTokenRepo;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -21,29 +24,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RefreshTokenService {
 
+    @Autowired
+    private RefreshTokenService refreshService;
+
+    @Autowired
+    private RefreshTokenRepo refreshRepo;
+
 
     public void detectReplay(
             RefreshToken token
     ) {
-
-        /*
-         * Token já utilizado anteriormente.
-         *
-         * Isso indica:
-         * - possível vazamento
-         * - possível roubo de sessão
-         * - replay attack
-         */
+        //Verifica se o token ja foi utilizado
         if (token.isUsed()) {
 
-            /*
-             * Revoga todos tokens do usuário.
-             *
-             * Medida defensiva:
-             * assume comprometimento da sessão.
-             */
-            refreshTokenRepository
-                    .revokeAllByUserId(
+            refreshRepo
+                    .revokeAllById(
                             token.getUser().getId()
                     );
 
@@ -52,63 +47,49 @@ public class RefreshTokenService {
             );
         }
     }
-
-    /*
-     * 30 dias.
-     */
+    //Sera configurada apartir de variaveis de ambiente
     private static final long REFRESH_EXPIRATION =
             30L * 24 * 60 * 60;
 
-    /*
-     * Gera token aleatório.
-     *
-     * Não utilizar JWT para refresh token
-     * simplifica replay detection.
-     */
+    //Nao utilize JWT para refresh token, torne em algo mais simples porem seguro
     public String generateRefreshToken() {
 
         return UUID.randomUUID().toString()
                 + UUID.randomUUID();
     }
-
-    /*
-     * Marca refresh token antigo como usado.
-     *
-     * IMPORTANTÍSSIMO:
-     * replay detection depende disso.
-     */
+    //Funcao para tornar token como utilizado
     public void markAsUsed(String token) {
 
-        /*
-         * Buscar token no banco.
-         * token.setUsed(true)
-         * salvar.
-         */
+        boolean isUsed = refreshRepo.findByToken(token).isUsed();
+
+        if (isUsed) {
+            throw new RuntimeException(
+                    "Refresh token already used");
+        }
     }
 
-    /*
-     * Revoga token explicitamente.
-     */
+    //Revogando token
     public void revokeToken(String token) {
+        RefreshToken obj = refreshRepo.findByToken(token);
 
-        /*
-         * token.setRevoked(true)
-         */
+        obj.setRevoked(true);
+        refreshRepo.save(obj);
     }
 
-    /*
-     * Detecta replay.
-     *
-     * Se token já foi usado:
-     * possível roubo de sessão.
-     */
-    public void validateReplayAttack(String token) {
+    public void saveRefreshToken(RefreshToken token) {
+        RefreshToken obj = refreshRepo.findByToken(token.getToken());
 
-        /*
-         * if token.used == true:
-         *     invalidar sessão
-         *     lançar exceção
-         */
+        if (obj == null || obj.isUsed()) {
+            throw new RuntimeException("Refresh token already used");
+        }
+        obj.setCreatedAt(Instant.now());
+        obj.setExpiresAt(Instant.now().plusSeconds(REFRESH_EXPIRATION));
+    }
+
+    public void validateReplayAttack(RefreshToken token) {
+        if (token.isUsed()) {
+            detectReplay(token);
+        }
     }
 
     /*

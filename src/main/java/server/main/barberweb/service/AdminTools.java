@@ -22,10 +22,6 @@ public class AdminTools {
 
     //USERS SECTION
 
-    public List<User> listarUsuarios() {
-        return userRepo.findAll();
-    }
-
     public String editarUsuario(UserDto dto) {
         User user = userRepo.findById(dto.getId())
                 .orElseThrow(() -> new RuntimeException("The user could not be found!"));
