@@ -86,9 +86,11 @@ public class RefreshTokenService {
         obj.setExpiresAt(Instant.now().plusSeconds(REFRESH_EXPIRATION));
     }
 
-    public void validateReplayAttack(RefreshToken token) {
-        if (token.isUsed()) {
-            detectReplay(token);
+    public void validateReplayAttack(String token) {
+        RefreshToken obj = refreshRepo.findByToken(token);
+
+        if (obj.isUsed()) {
+            detectReplay(obj);
         }
     }
 

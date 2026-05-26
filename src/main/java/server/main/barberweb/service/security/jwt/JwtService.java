@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +14,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
-@Service
+@Component
 public class JwtService {
 
     /*
@@ -25,7 +25,7 @@ public class JwtService {
      * HS256 exige uma chave suficientemente forte.
      * Recomenda-se pelo menos 256 bits.
      */
-    @Value("${security.jwt.secret}")
+    @Value("${JWT_SECRET}")
     private String jwtSecret;
 
     /*

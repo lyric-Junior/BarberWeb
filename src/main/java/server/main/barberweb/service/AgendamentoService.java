@@ -76,8 +76,9 @@ public class AgendamentoService {
 
         dto.setId(agendamento.getId());
         dto.setData(agendamento.getData());
+        dto.setHorario(agendamento.getHorario());
         dto.setProfissional(agendamento.getProfissional());
-        dto.setData();
+        return dto;
     }
 
 }

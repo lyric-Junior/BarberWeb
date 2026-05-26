@@ -10,6 +10,7 @@ import server.main.barberweb.model.dtos.login.LoginRequest;
 import server.main.barberweb.model.dtos.login.LoginResponse;
 import server.main.barberweb.model.entitys.RefreshToken;
 import server.main.barberweb.model.entitys.User;
+import server.main.barberweb.repository.RefreshTokenRepo;
 import server.main.barberweb.repository.UserRepository;
 import server.main.barberweb.service.security.jwt.JwtService;
 
@@ -34,6 +35,9 @@ public class AuthService {
 
     @Autowired
     private RefreshTokenService refreshTokenService;
+
+    @Autowired
+    private RefreshTokenRepo refreshRepo;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -81,15 +85,8 @@ public class AuthService {
 
         response.setAcessToken(acessToken);
         response.setRefreshToken(refreshToken);
+        // Retornar resposta
 
-
-        /*
-         * Persistir refresh token.
-         */
-
-        /*
-         * Retornar resposta.
-         */
         return response;
     }
 
@@ -98,34 +95,49 @@ public class AuthService {
      */
     public void refresh(String refreshToken) {
 
-        /*
-         * Validar replay.
-         */
+        RefreshToken refreshToken1 = refreshRepo.findByToken(refreshToken);
 
-        /*
-         * Validar expiração.
-         */
+        if (refreshToken1 == null) {
+            throw new BadCredentialsException("Bad credentials");
+        }
+
+        //Validar replay
+        refreshTokenService.validateReplayAttack(refreshToken);
+
+        // Validar expiração
+        refreshTokenService.isExpired(refreshToken1.getExpiresAt());
 
         /*
          * Marcar token antigo como usado.
          */
+        refreshToken1.setUsed(true);
 
-        /*
-         * Gerar novo refresh token.
-         */
+        //User info
+        User user = userRepo.findById(refreshToken1.getUser().getId())
+                .orElseThrow(() -> new BadCredentialsException("Bad credentials!"));
 
-        /*
-         * Gerar novo access token.
-         */
+        //Gerar novo refresh
+        String refreshToken2 = refreshTokenService.generateRefreshToken();
+
+        //Criar RefreshToken
+        RefreshToken obj = new RefreshToken();
+
+        //Getting and setting
+        obj.setRevoked(false);
+        obj.setToken(refreshToken2);
+        obj.setUsed(false);
+        obj.setUser(refreshToken1.getUser());
+
+
+        //Persistir
+        refreshTokenService.saveRefreshToken(obj);
+        refreshTokenService.saveRefreshToken(refreshToken1);
 
         /*
          * Persistir novo refresh token.
          */
     }
 
-    /*
-     * Logout simples.
-     */
     public void logout(String refreshToken) {
 
         refreshTokenService.revokeToken(

@@ -2,14 +2,8 @@ package server.main.barberweb.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
-import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.AgendamentoRepository;
-import server.main.barberweb.repository.UserRepository;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class AdminTools {
@@ -17,37 +11,7 @@ public class AdminTools {
     @Autowired
     private AgendamentoRepository agendamentoRepo;
 
-    @Autowired
-    private UserRepository userRepo;
-
-    //USERS SECTION
-
-    public String editarUsuario(UserDto dto) {
-        User user = userRepo.findById(dto.getId())
-                .orElseThrow(() -> new RuntimeException("The user could not be found!"));
-
-        user.setEmail(dto.getEmail());
-        user.setUsername(dto.getUsername());
-        user.setNumero(dto.getNumero());
-        user.setId(dto.getId());
-
-        userRepo.save(user);
-
-        return ("The user was edited successfully!");
-    }
-
-    public String deletarUsuario(UUID id) {
-        User user = userRepo.findById(id)
-                        .orElseThrow(() -> new RuntimeException("The user could not be found!"));
-
-        userRepo.deleteById(id);
-
-        return ("User deleted sucessfully!");
-    }
-
-    //AGENDAMENTO SECTION
-
-
+    //Cancelar agendamento
     public String cancelarAgendamento(Long id) {
         Agendamento vaga = agendamentoRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("The scheduling was not found!"));
@@ -68,7 +32,7 @@ public class AdminTools {
         return ("The scheduling " + vaga.getId() + " was updated!");
     }
 
-    public String tornarDisponível(Long id) {
+    public String tornarDisponivel(Long id) {
         Agendamento vaga = agendamentoRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("The scheduling could not be found!"));
 

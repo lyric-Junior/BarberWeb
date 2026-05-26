@@ -2,12 +2,13 @@ package server.main.barberweb.controller;
 
 
 import jakarta.validation.Valid;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.main.barberweb.model.dtos.AgendamentoDto;
 import server.main.barberweb.model.dtos.UserDto;
+import server.main.barberweb.model.dtos.register.RegRequest;
+import server.main.barberweb.model.dtos.register.RegResponse;
 import server.main.barberweb.service.AgendamentoService;
 import server.main.barberweb.service.UserService;
 
@@ -23,9 +24,8 @@ public class UserController {
     private AgendamentoService scheduleService;
 
     @PostMapping("/definirHorario/{id}")
-    public ResponseEntity<?> definirHorario(@RequestParam Long id, @RequestBody @Valid UserDto user, Authentication auth) {
-        service.definirHorario(user, id);
-        return ResponseEntity.ok("Your schedule is already setted up!");
+    public ResponseEntity<?> definirHorario(@RequestParam Long id, @RequestBody @Valid UserDto user) {
+        return ResponseEntity.ok(service.definirHorario(user, id));
     }
 
     @GetMapping("/listarParaMim")
@@ -34,8 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<String> definirHorario() {
-
+    public ResponseEntity<RegResponse> cadastrarUsuario(RegRequest request) {
+        return ResponseEntity.ok(service.cadastrarUsuario(request));
     }
-
 }

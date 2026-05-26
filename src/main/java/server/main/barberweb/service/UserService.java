@@ -50,8 +50,9 @@ public class UserService {
     }
 
     public String deletarUsuario(UUID id) {
-        User user = userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("The user could not be found!"));
+        userRepo.findById(id)
+                .orElseThrow(
+                        () -> new RuntimeException("The user could not be found!"));
 
         userRepo.deleteById(id);
 

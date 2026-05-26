@@ -1,11 +1,13 @@
 package server.main.barberweb.service.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,8 +20,8 @@ import server.main.barberweb.service.security.jwt.JwtAuthenticationFilter;
 @RequiredArgsConstructor
 public class SecurityService {
 
-
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -49,7 +51,7 @@ public class SecurityService {
                  * Como utilizamos JWT stateless:
                  * CSRF pode ser desativado.
                  */
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
 
                 /*
                  * Habilita CORS usando configuração padrão/customizada.
@@ -61,9 +63,7 @@ public class SecurityService {
                  */
                 .authorizeHttpRequests(auth -> auth
 
-                        /*
-                         * Endpoints públicos.
-                         */
+                        //Endpoints publicos de autenticacao
                         .requestMatchers(
                                 "/auth/login",
                                 "/auth/refresh"
@@ -73,7 +73,7 @@ public class SecurityService {
                          * Apenas ADMIN.
                          */
                         .requestMatchers("/admin/**")
-                        .hasRole("ADMIN")
+                        .hasAnyRole("ADMIN", "DEVELOPER")
 
                         /*
                          * Apenas DEVELOPER.
@@ -81,6 +81,8 @@ public class SecurityService {
                         .requestMatchers("/developer/**")
                         .hasRole("DEVELOPER")
 
+                        .requestMatchers("/user")
+                        .hasAnyRole("USER", "DEVELOPER")
                         /*
                          * Qualquer outro endpoint:
                          * exige autenticação.
