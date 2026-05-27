@@ -9,5 +9,4 @@ import java.util.List;
 public interface AgendamentoRepository
 extends JpaRepository<Agendamento, Long>, JpaSpecificationExecutor<Agendamento> {
 
-    List<Agendamento> findByAtivos(boolean ativo);
 }

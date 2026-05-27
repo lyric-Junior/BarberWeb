@@ -1,6 +1,7 @@
 package server.main.barberweb.service.bootstrap;
 
 
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.boot.CommandLineRunner;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Component;
 import server.main.barberweb.model.entitys.Role;
 import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.UserRepository;
+
+import static server.main.barberweb.config.Config.DEV_EMAIL;
+import static server.main.barberweb.config.Config.DEV_PASSWORD;
 
 @Component
 @RequiredArgsConstructor
@@ -30,10 +34,13 @@ public class DevBoootstrap implements CommandLineRunner {
 
         User user = new User();
 
+        String hashPassword = passwordEncoder.encode(DEV_PASSWORD);
+
+
         user.setUsername("Developer");
-        user.setPassword(System.getenv("DEV_PASSWORD"));
+        user.setPassword(hashPassword);
         user.setRole(Role.DEVELOPER);
-        user.setEmail(System.getenv("DEV_EMAIL"));
+        user.setEmail(DEV_EMAIL);
         userRepo.save(user);
     }
 

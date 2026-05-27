@@ -1,8 +1,6 @@
 package server.main.barberweb.model.entitys;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,5 +17,7 @@ public class RefreshToken {
     private boolean revoked;
     private Instant createdAt;
     private Instant expiresAt;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 }

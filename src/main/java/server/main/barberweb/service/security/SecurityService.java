@@ -34,33 +34,21 @@ public class SecurityService {
     ) throws Exception {
 
         http
-
-                /*
-                 * APIs REST com JWT normalmente não utilizam sessão HTTP.
-                 */
+                // APIs REST com JWT normalmente não utilizam sessão HTTP.
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         )
                 )
 
-                /*
-                 * CSRF é relevante principalmente para aplicações
-                 * baseadas em sessão/cookie.
-                 *
-                 * Como utilizamos JWT stateless:
-                 * CSRF pode ser desativado.
-                 */
+                // CSRF é relevante principalmente para aplicações baseadas em sessão/cookie.
                 .csrf(AbstractHttpConfigurer::disable)
 
-                /*
-                 * Habilita CORS usando configuração padrão/customizada.
-                 */
+                // Habilita CORS usando configuração padrão/customizada.
                 .cors(Customizer.withDefaults())
 
-                /*
-                 * Define permissões de endpoints.
-                 */
+                // Define permissões de endpoints
+
                 .authorizeHttpRequests(auth -> auth
 
                         //Endpoints publicos de autenticacao
@@ -69,32 +57,24 @@ public class SecurityService {
                                 "/auth/refresh"
                         ).permitAll()
 
-                        /*
-                         * Apenas ADMIN.
-                         */
+                        // Apenas Admins
                         .requestMatchers("/admin/**")
                         .hasAnyRole("ADMIN", "DEVELOPER")
 
-                        /*
-                         * Apenas DEVELOPER.
-                         */
+                        //Apenas DEVELOPER
                         .requestMatchers("/developer/**")
                         .hasRole("DEVELOPER")
 
                         .requestMatchers("/user")
                         .hasAnyRole("USER", "DEVELOPER")
-                        /*
-                         * Qualquer outro endpoint:
-                         * exige autenticação.
-                         */
+
+                        //Qualquer outro endpoint vai precisar de autenticacao
                         .anyRequest()
                         .authenticated()
                 )
 
-                /*
-                 * Adiciona filtro JWT antes do filtro padrão
-                 * do Spring Security.
-                 */
+                //  Adiciona filtro JWT antes do filtro padrão do Spring Boot Security.
+
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class

@@ -6,7 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
 
     /*
-     * Header padrão Bearer.
+     * Header padrao Bearer.
      */
     private static final String AUTH_HEADER = "Authorization";
 
@@ -55,15 +54,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-
-            /*
-             * Remove "Bearer ".
-             */
+            //Remover Bearer do token
             String token = authHeader.substring(TOKEN_PREFIX.length());
 
-            /*
-             * Proteção adicional.
-             */
+            //Verifica se o token realmente existe
             if (!jwtService.isAccessToken(token)) {
 
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -79,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String role = claims.get("role", String.class);
 
             /*
-             * Prefixo ROLE_ é obrigatório para hasRole().
+             * Prefixo ROLE é obrigatório para hasRole().
              */
             SimpleGrantedAuthority authority =
                     new SimpleGrantedAuthority("ROLE_" + role);

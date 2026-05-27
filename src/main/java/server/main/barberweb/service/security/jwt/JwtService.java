@@ -14,6 +14,8 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
+import static server.main.barberweb.config.Config.JWT_SECRET;
+
 @Component
 public class JwtService {
 
@@ -25,8 +27,7 @@ public class JwtService {
      * HS256 exige uma chave suficientemente forte.
      * Recomenda-se pelo menos 256 bits.
      */
-    @Value("${JWT_SECRET}")
-    private String jwtSecret;
+    private String jwtSecret = JWT_SECRET;
 
     /*
      * Access token curto reduz impacto de vazamento.

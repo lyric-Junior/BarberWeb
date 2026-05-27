@@ -16,7 +16,7 @@ public class AdminTools {
         Agendamento vaga = agendamentoRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("The scheduling was not found!"));
         vaga.setAtiva(false);
-        return ("The scheduling " + vaga + " was canceled!");
+        return ("The scheduling " + vaga.getId() + " was canceled!");
     }
 
     public String editarAgendamento(Agendamento body) {

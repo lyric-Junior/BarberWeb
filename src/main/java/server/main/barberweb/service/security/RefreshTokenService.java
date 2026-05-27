@@ -25,9 +25,6 @@ import java.util.UUID;
 public class RefreshTokenService {
 
     @Autowired
-    private RefreshTokenService refreshService;
-
-    @Autowired
     private RefreshTokenRepo refreshRepo;
 
 
