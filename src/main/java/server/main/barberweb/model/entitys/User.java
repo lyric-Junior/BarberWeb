@@ -24,7 +24,7 @@ public class User {
     @Size(max = 20)
     private String username;
 
-    @Size(min = 8, max = 16)
+    @Size(min = 8)
     private String password;
 
     @CPF

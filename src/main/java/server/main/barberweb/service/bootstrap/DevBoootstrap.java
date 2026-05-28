@@ -1,7 +1,5 @@
 package server.main.barberweb.service.bootstrap;
 
-
-import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.boot.CommandLineRunner;

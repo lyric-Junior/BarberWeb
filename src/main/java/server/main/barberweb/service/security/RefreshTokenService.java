@@ -74,13 +74,10 @@ public class RefreshTokenService {
     }
 
     public void saveRefreshToken(RefreshToken token) {
-        RefreshToken obj = refreshRepo.findByToken(token.getToken());
 
-        if (obj == null || obj.isUsed()) {
-            throw new RuntimeException("Refresh token already used");
-        }
-        obj.setCreatedAt(Instant.now());
-        obj.setExpiresAt(Instant.now().plusSeconds(REFRESH_EXPIRATION));
+        token.setCreatedAt(Instant.now());
+        token.setExpiresAt(Instant.now().plusSeconds(REFRESH_EXPIRATION));
+        refreshRepo.save(token);
     }
 
     public void validateReplayAttack(String token) {

@@ -2,19 +2,19 @@ package server.main.barberweb.service.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.login.LoginRequest;
 import server.main.barberweb.model.dtos.login.LoginResponse;
 import server.main.barberweb.model.entitys.RefreshToken;
+import server.main.barberweb.model.entitys.Role;
 import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.RefreshTokenRepo;
 import server.main.barberweb.repository.UserRepository;
 import server.main.barberweb.service.security.jwt.JwtService;
 
-import java.time.Instant;
+import java.util.Optional;
 
 /*
  * Serviço principal da autenticação.
@@ -48,8 +48,9 @@ public class AuthService {
      * Fluxo de login.
      */
     public LoginResponse login(LoginRequest request) {
+
         User user =  userRepo.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Bad credentials"));
+                .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
 
         boolean passwordMatches =
                 passwordEncoder.matches(
