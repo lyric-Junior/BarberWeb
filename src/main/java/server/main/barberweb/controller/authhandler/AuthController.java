@@ -1,10 +1,14 @@
 package server.main.barberweb.controller.authhandler;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.main.barberweb.model.dtos.login.LoginRequest;
 import server.main.barberweb.model.dtos.login.LoginResponse;
+import server.main.barberweb.model.dtos.register.RegRequest;
+import server.main.barberweb.model.dtos.register.RegResponse;
+import server.main.barberweb.service.UserService;
 import server.main.barberweb.service.security.AuthService;
 
 /*
@@ -19,12 +23,19 @@ public class AuthController {
 
     private final AuthService authService;
 
+    private final UserService userService;
+
     /*
      * Login.
      */
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest dto) {
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest dto) {
         return ResponseEntity.ok(authService.login(dto));
+    }
+
+    @PostMapping("/cadastrarUsuario")
+    public ResponseEntity<RegResponse> cadastrarUsuario(@RequestBody @Valid RegRequest request) {
+        return ResponseEntity.ok(userService.cadastrarUsuario(request));
     }
 
     /*

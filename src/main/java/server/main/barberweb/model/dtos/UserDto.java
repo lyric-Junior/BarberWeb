@@ -15,4 +15,6 @@ public class UserDto {
     private String numero;
 
     private String email;
+
+    private String cpf;
 }

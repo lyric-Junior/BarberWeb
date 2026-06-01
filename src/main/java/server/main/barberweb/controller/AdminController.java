@@ -1,12 +1,10 @@
 package server.main.barberweb.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
-import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.service.AdminTools;
 import server.main.barberweb.service.AgendamentoService;
 import server.main.barberweb.service.UserService;
@@ -28,7 +26,7 @@ public class AdminController {
     private AdminTools adminTools;
 
     @GetMapping("/listarUsuarios")
-    public ResponseEntity<List<User>> listarUsuarios() {
+    public ResponseEntity<List<UserDto>> listarUsuarios() {
         return ResponseEntity.ok(userService.listarUsuarios());
     }
 
@@ -65,5 +63,10 @@ public class AdminController {
     @PostMapping("/tornarDisponivel")
     public ResponseEntity<String> tornarDisponivel(@RequestParam Long id) {
         return ResponseEntity.ok(adminTools.tornarDisponivel(id));
+    }
+
+    @PostMapping("/criarAgendamento")
+    public ResponseEntity<String> criarAgendamento(@RequestBody Agendamento schedule) {
+        return ResponseEntity.ok(scheduleService.cadastrarAgendamento(schedule));
     }
 }

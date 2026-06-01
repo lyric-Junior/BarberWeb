@@ -13,8 +13,8 @@ public class StartUpSound {
         try {
 
             ProcessBuilder processBuilder = new ProcessBuilder(
-                    "paplay",
-                    "/home/toucan/Music/de-copao-na-mao.wav"
+                    "aplay",
+                    "/home/toucan_it/Music/de-copao-na-mao-estourado"
             );
 
             processBuilder.start();

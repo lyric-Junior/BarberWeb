@@ -71,6 +71,26 @@ public class AgendamentoService {
                 .collect(Collectors.toList());
     }
 
+    public String cadastrarAgendamento(Agendamento body) {
+        boolean exists = repo.existsById(body.getId());
+
+        if (exists) {
+            throw new RuntimeException("The schedule already exists, edit or delete the existing one!");
+        }
+
+        Agendamento schedule = new Agendamento();
+
+        schedule.setId(body.getId());
+        schedule.setCliente(body.getCliente());
+        schedule.setHorario(body.getHorario());
+        schedule.setAtiva(body.isAtiva());
+        schedule.setDisponivel(body.isDisponivel());
+
+        repo.save(schedule);
+
+        return ("The scheduling " + schedule.getId() + " has been registered!");
+    }
+
     private AgendamentoDto convertAgendamentoDto(Agendamento agendamento) {
         AgendamentoDto dto = new AgendamentoDto();
 

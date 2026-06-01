@@ -15,6 +15,7 @@ import server.main.barberweb.repository.UserRepository;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +32,8 @@ public class UserService {
 
     //USERS SECTION
 
-    public List<User> listarUsuarios() {
-        return userRepo.findAll();
+    public List<UserDto> listarUsuarios() {
+        return userRepo.findAll().stream().map(this::convertUserDto).collect(Collectors.toList());
     }
 
     public String editarUsuario(UserDto dto) {
@@ -82,7 +83,7 @@ public class UserService {
 
         //Seguindo essa regra nenhum nome pode ser igual, então tem que ser um nome maior.
 
-        if (userStored.getUsername().equals(request.getUsername())) {
+        if (userStored != null) {
             throw new RuntimeException("The user already exists!");
         }
 
@@ -107,7 +108,16 @@ public class UserService {
         response.setUsername(user.getUsername());
         response.setMessage("Usuário cadastrado com sucesso!");
 
-
         return (response);
+    }
+
+    private UserDto convertUserDto(User user) {
+        UserDto dto = new UserDto();
+
+        dto.setEmail(user.getEmail());
+        dto.setNumero(user.getNumero());
+        dto.setId(user.getId());
+
+        return dto;
     }
 }

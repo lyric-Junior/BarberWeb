@@ -32,9 +32,4 @@ public class UserController {
     public List<AgendamentoDto> listarParaMim() {
         return scheduleService.listarParaMim();
     }
-
-    @PostMapping("/")
-    public ResponseEntity<RegResponse> cadastrarUsuario(RegRequest request) {
-        return ResponseEntity.ok(service.cadastrarUsuario(request));
-    }
 }

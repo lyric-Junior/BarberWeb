@@ -54,7 +54,8 @@ public class SecurityService {
                         //Endpoints publicos de autenticacao
                         .requestMatchers(
                                 "/auth/login",
-                                "/auth/refresh"
+                                "/auth/refresh",
+                                "/auth/cadastrarUsuario"
                         ).permitAll()
 
                         // Apenas Admins
