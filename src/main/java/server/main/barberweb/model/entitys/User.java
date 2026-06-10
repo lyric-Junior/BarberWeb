@@ -13,28 +13,33 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
 public class User {
 
+    @Getter @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Getter @Setter
     @Size(max = 20)
     private String username;
 
+    @Getter @Setter
     @Size(min = 8)
     private String password;
 
+    @Getter @Setter
     @CPF
     private String cpf;
 
+    @Getter @Setter
     private String numero;
 
+    @Getter @Setter
     @Email
     private String email;
 
+    @Getter @Setter
     @Enumerated(EnumType.STRING)
     private Role role;
 }

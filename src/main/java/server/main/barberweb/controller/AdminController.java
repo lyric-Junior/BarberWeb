@@ -7,6 +7,7 @@ import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.service.AdminTools;
 import server.main.barberweb.service.AgendamentoService;
+import server.main.barberweb.service.ServiceService;
 import server.main.barberweb.service.UserService;
 
 import java.util.List;
@@ -21,6 +22,9 @@ public class AdminController {
 
     @Autowired
     private AgendamentoService scheduleService;
+
+    @Autowired
+    private ServiceService serviceService;
 
     @Autowired
     private AdminTools adminTools;
@@ -68,5 +72,12 @@ public class AdminController {
     @PostMapping("/criarAgendamento")
     public ResponseEntity<String> criarAgendamento(@RequestBody Agendamento schedule) {
         return ResponseEntity.ok(scheduleService.cadastrarAgendamento(schedule));
+    }
+
+    @PostMapping("/deletarServico")
+    public ResponseEntity<String> deletarServico(@RequestParam Integer id) {
+        serviceService.deletarServico(id);
+
+        return ResponseEntity.ok("The service " + id + " was deleted!");
     }
 }

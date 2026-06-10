@@ -17,7 +17,6 @@ public class AgendamentoService {
     @Autowired
     private AgendamentoRepository repo;
 
-
     public List<Agendamento> listarAgendamentos() {
         return repo.findAll();
     }
@@ -85,6 +84,7 @@ public class AgendamentoService {
         schedule.setHorario(body.getHorario());
         schedule.setAtiva(body.isAtiva());
         schedule.setDisponivel(body.isDisponivel());
+        schedule.setServicos(body.getServicos());
 
         repo.save(schedule);
 

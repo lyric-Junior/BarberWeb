@@ -7,9 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.main.barberweb.model.dtos.AgendamentoDto;
 import server.main.barberweb.model.dtos.UserDto;
-import server.main.barberweb.model.dtos.register.RegRequest;
-import server.main.barberweb.model.dtos.register.RegResponse;
+import server.main.barberweb.model.entitys.Servico;
+import server.main.barberweb.repository.ServiceRepository;
 import server.main.barberweb.service.AgendamentoService;
+import server.main.barberweb.service.ServiceService;
 import server.main.barberweb.service.UserService;
 
 import java.util.List;
@@ -20,6 +21,10 @@ public class UserController {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private ServiceService serviceService;
+
     @Autowired
     private AgendamentoService scheduleService;
 
@@ -31,5 +36,10 @@ public class UserController {
     @GetMapping("/listarParaMim")
     public List<AgendamentoDto> listarParaMim() {
         return scheduleService.listarParaMim();
+    }
+
+    @GetMapping("/listarServicos")
+    public List<Servico> listarServicos() {
+        return serviceService.listarServicos();
     }
 }
