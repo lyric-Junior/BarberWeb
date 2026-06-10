@@ -5,8 +5,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.AgendamentoDto;
 import server.main.barberweb.model.entitys.Agendamento;
+import server.main.barberweb.model.entitys.Servico;
 import server.main.barberweb.repository.AgendamentoRepository;
 import server.main.barberweb.repository.AgendamentoSpecification;
+import server.main.barberweb.repository.ServiceRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +18,9 @@ public class AgendamentoService {
 
     @Autowired
     private AgendamentoRepository repo;
+
+    @Autowired
+    private ServiceRepository serviceRepo;
 
 
     public List<Agendamento> listarAgendamentos() {
@@ -79,6 +84,8 @@ public class AgendamentoService {
         }
 
         Agendamento schedule = new Agendamento();
+
+        List<Servico> servicos  = serviceRepo.findAllById();
 
         schedule.setId(body.getId());
         schedule.setCliente(body.getCliente());

@@ -8,15 +8,25 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "refresh_tokens")
-@Getter @Setter
 public class RefreshToken {
 
+    @Getter @Setter
     @Id
     private String token;
+
+    @Getter @Setter
     private boolean used;
+
+    @Getter @Setter
     private boolean revoked;
+
+    @Getter @Setter
     private Instant createdAt;
+
+    @Getter @Setter
     private Instant expiresAt;
+
+    @Getter @Setter
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

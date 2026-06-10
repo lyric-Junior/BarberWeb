@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name = "agendamentos")
@@ -37,6 +38,10 @@ public class Agendamento {
     @Getter
     @Setter
     private String profissional;
+
+    @Getter @Setter
+    @ManyToMany
+    private List<Servico> servicos;
 
     @Getter
     @Setter

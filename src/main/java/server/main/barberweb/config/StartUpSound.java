@@ -14,7 +14,7 @@ public class StartUpSound {
 
             ProcessBuilder processBuilder = new ProcessBuilder(
                     "aplay",
-                    "/home/toucan_it/Music/de-copao-na-mao-estourado"
+                    "/home/toucan/Music/de-copao-na-mao.wav"
             );
 
             processBuilder.start();

@@ -16,6 +16,8 @@ import server.main.barberweb.service.security.AuthService;
  *
  * Não colocar lógica de negócio aqui.
  */
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
