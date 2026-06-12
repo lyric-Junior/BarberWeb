@@ -33,7 +33,9 @@ public class UserService {
     //USERS SECTION
 
     public List<UserDto> listarUsuarios() {
-        return userRepo.findAll().stream().map(this::convertUserDto).collect(Collectors.toList());
+        return userRepo.findAll().stream()
+                .map(this::convertUserDto)
+                .collect(Collectors.toList());
     }
 
     public String editarUsuario(UserDto dto) {

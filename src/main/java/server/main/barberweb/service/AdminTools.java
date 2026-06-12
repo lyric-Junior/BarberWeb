@@ -29,6 +29,7 @@ public class AdminTools {
         vaga.setData(body.getData());
         vaga.setAtiva(body.isAtiva());
         vaga.setDisponivel(body.isDisponivel());
+        vaga.setServicos(body.getServicos());
         return ("The scheduling " + vaga.getId() + " was updated!");
     }
 

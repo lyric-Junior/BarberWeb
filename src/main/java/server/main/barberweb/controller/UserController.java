@@ -29,7 +29,7 @@ public class UserController {
     private AgendamentoService scheduleService;
 
     @PostMapping("/definirHorario/{id}")
-    public ResponseEntity<?> definirHorario(@RequestParam Long id, @RequestBody @Valid UserDto user) {
+    public ResponseEntity<?> definirHorario(@PathVariable Long id, @Valid UserDto user) {
         return ResponseEntity.ok(service.definirHorario(user, id));
     }
 

@@ -59,6 +59,11 @@ public class AdminController {
         return ResponseEntity.ok(adminTools.cancelarAgendamento(id));
     }
 
+    @DeleteMapping("/deletarAgendamento")
+    public ResponseEntity<String> deletarAgendamento(@RequestParam Long id) {
+        return ResponseEntity.ok(scheduleService.deletarAgendamento(id));
+    }
+
     @PostMapping("/editarAgendamento")
     public ResponseEntity<?> editarAgendamento(@RequestBody Agendamento body) {
         return ResponseEntity.ok(adminTools.editarAgendamento(body));

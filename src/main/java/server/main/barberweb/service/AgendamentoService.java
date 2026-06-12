@@ -91,6 +91,11 @@ public class AgendamentoService {
         return ("The scheduling " + schedule.getId() + " has been registered!");
     }
 
+    public String deletarAgendamento(Long id) {
+        repo.deleteById(id);
+        return ("The schedule" + id + " has been deleted!");
+    }
+
     private AgendamentoDto convertAgendamentoDto(Agendamento agendamento) {
         AgendamentoDto dto = new AgendamentoDto();
 
