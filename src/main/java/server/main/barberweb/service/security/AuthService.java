@@ -86,6 +86,9 @@ public class AuthService {
 
         response.setAcessToken(acessToken);
         response.setRefreshToken(refreshToken);
+        response.setEmail(user.getEmail());
+        response.setUsername(user.getUsername());
+        response.setNumero(user.getNumero());
         // Retornar resposta
 
         return response;
@@ -94,7 +97,7 @@ public class AuthService {
     /*
      * Fluxo de refresh.
      */
-    public void refresh(String refreshToken) {
+    public LoginResponse refresh(String refreshToken) {
 
         RefreshToken refreshToken1 = refreshRepo.findByToken(refreshToken);
 
@@ -132,11 +135,18 @@ public class AuthService {
 
         //Persistir
         refreshTokenService.saveRefreshToken(obj);
-        refreshTokenService.saveRefreshToken(refreshToken1);
+        refreshTokenService.revokeToken(refreshToken1.getToken());
 
         /*
          * Persistir novo refresh token.
          */
+
+        LoginResponse response = new LoginResponse();
+
+        response.setAcessToken(jwtService.generateAccessToken(user.getId(), user.getRole().name()));
+        response.setRefreshToken(refreshToken2);
+
+        return response;
     }
 
     public void logout(String refreshToken) {

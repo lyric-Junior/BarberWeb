@@ -67,7 +67,7 @@ public class SecurityService {
                         .hasRole("DEVELOPER")
 
                         .requestMatchers("/user")
-                        .hasAnyRole("USER", "DEVELOPER")
+                        .hasAnyRole("USER", "DEVELOPER", "ADMIN")
 
                         //Qualquer outro endpoint vai precisar de autenticacao
                         .anyRequest()

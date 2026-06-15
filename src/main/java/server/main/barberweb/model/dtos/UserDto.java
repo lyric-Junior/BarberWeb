@@ -2,6 +2,7 @@ package server.main.barberweb.model.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
+import server.main.barberweb.model.entitys.Role;
 
 import java.util.UUID;
 
@@ -16,5 +17,5 @@ public class UserDto {
 
     private String email;
 
-    private String cpf;
+    private Role role;
 }

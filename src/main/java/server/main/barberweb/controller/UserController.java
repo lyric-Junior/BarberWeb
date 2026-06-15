@@ -33,6 +33,11 @@ public class UserController {
         return ResponseEntity.ok(service.definirHorario(user, id));
     }
 
+    @PutMapping("/cancelarHorario/{id}")
+    public ResponseEntity<String> cancelarHorario(@Valid @PathVariable Long id) {
+        return ResponseEntity.ok(service.cancelarHorario(id));
+    }
+
     @GetMapping("/listarParaMim")
     public List<AgendamentoDto> listarParaMim() {
         return scheduleService.listarParaMim();

@@ -77,6 +77,18 @@ public class UserService {
         return ("Your schedule is already setted up!");
     }
 
+    public String cancelarHorario(Long id) {
+        Agendamento agendamento = agendamentoRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("the schedule could not be found!"));
+
+        agendamento.setDisponivel(true);
+        agendamento.setAtiva(true);
+        agendamento.setServicos(null);
+        agendamento.setCliente(null);
+
+        return ("The appointment is cancelled!");
+    }
+
 
 
     public RegResponse cadastrarUsuario(RegRequest request) {
@@ -119,6 +131,8 @@ public class UserService {
         dto.setEmail(user.getEmail());
         dto.setNumero(user.getNumero());
         dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setRole(user.getRole());
 
         return dto;
     }

@@ -10,4 +10,10 @@ public class LoginResponse {
     private String refreshToken;
 
     private String acessToken;
+
+    private String username;
+
+    private String email;
+
+    private String numero;
 }

@@ -47,12 +47,12 @@ public class AuthController {
      * X-Refresh-Token
      */
     @PostMapping("/refresh")
-    public void refresh(
+    public ResponseEntity<LoginResponse>  refresh(
             @RequestHeader("X-Refresh-Token")
             String refreshToken
     ) {
 
-        authService.refresh(refreshToken);
+        return ResponseEntity.ok(authService.refresh(refreshToken));
     }
 
     /*

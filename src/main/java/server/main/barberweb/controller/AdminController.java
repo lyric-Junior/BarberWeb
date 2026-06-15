@@ -1,10 +1,12 @@
 package server.main.barberweb.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
+import server.main.barberweb.model.entitys.Servico;
 import server.main.barberweb.service.AdminTools;
 import server.main.barberweb.service.AgendamentoService;
 import server.main.barberweb.service.ServiceService;
@@ -39,7 +41,7 @@ public class AdminController {
         return ResponseEntity.ok(scheduleService.listarAgendamentos());
     }
 
-    @PostMapping("/editarUsuario")
+    @PutMapping("/editarUsuario")
     public ResponseEntity<String> editarUsuario(@RequestBody UserDto user) {
         return ResponseEntity.ok(userService.editarUsuario(user));
     }
@@ -54,7 +56,7 @@ public class AdminController {
         return ResponseEntity.ok(scheduleService.listarPorFiltro(cliente, profissional, disponivel));
     }
 
-    @PostMapping("/cancelarAgendamento")
+    @PutMapping("/cancelarAgendamento")
     public ResponseEntity<String> cancelarAgendamento(@RequestParam Long id) {
         return ResponseEntity.ok(adminTools.cancelarAgendamento(id));
     }
@@ -64,7 +66,7 @@ public class AdminController {
         return ResponseEntity.ok(scheduleService.deletarAgendamento(id));
     }
 
-    @PostMapping("/editarAgendamento")
+    @PutMapping("/editarAgendamento")
     public ResponseEntity<?> editarAgendamento(@RequestBody Agendamento body) {
         return ResponseEntity.ok(adminTools.editarAgendamento(body));
     }
@@ -79,10 +81,15 @@ public class AdminController {
         return ResponseEntity.ok(scheduleService.cadastrarAgendamento(schedule));
     }
 
-    @PostMapping("/deletarServico")
+    @DeleteMapping("/deletarServico")
     public ResponseEntity<String> deletarServico(@RequestParam Integer id) {
         serviceService.deletarServico(id);
 
         return ResponseEntity.ok("The service " + id + " was deleted!");
+    }
+
+    @PostMapping("/cadastrarServico")
+    public ResponseEntity<String> cadastrarServico(@Valid @RequestBody Servico service) {
+        return ResponseEntity.ok(serviceService.cadastrarServico(service));
     }
 }
