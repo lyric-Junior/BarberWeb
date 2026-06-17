@@ -8,24 +8,11 @@ import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.login.LoginRequest;
 import server.main.barberweb.model.dtos.login.LoginResponse;
 import server.main.barberweb.model.entitys.RefreshToken;
-import server.main.barberweb.model.entitys.Role;
 import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.RefreshTokenRepo;
 import server.main.barberweb.repository.UserRepository;
 import server.main.barberweb.service.security.jwt.JwtService;
 
-import java.util.Optional;
-
-/*
- * Serviço principal da autenticação.
- *
- * Responsável por:
- * - login
- * - refresh
- * - logout
- *
- * Apenas orquestra.
- */
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -44,9 +31,9 @@ public class AuthService {
     @Autowired
     private UserRepository userRepo;
 
-    /*
-     * Fluxo de login.
-     */
+
+     // Fluxo de login.
+
     public LoginResponse login(LoginRequest request) {
 
         User user =  userRepo.findByEmail(request.getEmail())
@@ -66,9 +53,7 @@ public class AuthService {
                 user.getId(),
                 user.getRole().name()
         );
-        /*
-         * Gerar refresh token.
-         */
+        //Gera o refreshToken
 
         String refreshToken = refreshTokenService.generateRefreshToken();
 
@@ -84,7 +69,7 @@ public class AuthService {
 
         LoginResponse response = new LoginResponse();
 
-        response.setAcessToken(acessToken);
+        response.setAccessToken(acessToken);
         response.setRefreshToken(refreshToken);
         response.setEmail(user.getEmail());
         response.setUsername(user.getUsername());
@@ -94,9 +79,7 @@ public class AuthService {
         return response;
     }
 
-    /*
-     * Fluxo de refresh.
-     */
+    // Fluxo para o refreshToken
     public LoginResponse refresh(String refreshToken) {
 
         RefreshToken refreshToken1 = refreshRepo.findByToken(refreshToken);
@@ -110,10 +93,7 @@ public class AuthService {
 
         // Validar expiração
         refreshTokenService.isExpired(refreshToken1.getExpiresAt());
-
-        /*
-         * Marcar token antigo como usado.
-         */
+        // Invalidar token antigo
         refreshToken1.setUsed(true);
 
         //User info
@@ -136,14 +116,11 @@ public class AuthService {
         //Persistir
         refreshTokenService.saveRefreshToken(obj);
         refreshTokenService.revokeToken(refreshToken1.getToken());
-
-        /*
-         * Persistir novo refresh token.
-         */
+        //Persistir novo refreshToken
 
         LoginResponse response = new LoginResponse();
 
-        response.setAcessToken(jwtService.generateAccessToken(user.getId(), user.getRole().name()));
+        response.setAccessToken(jwtService.generateAccessToken(user.getId(), user.getRole().name()));
         response.setRefreshToken(refreshToken2);
 
         return response;
