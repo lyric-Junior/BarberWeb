@@ -2,8 +2,11 @@ package server.main.barberweb.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import server.main.barberweb.model.dtos.ScheduleRequest;
 import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.dtos.register.RegRequest;
 import server.main.barberweb.model.dtos.register.RegResponse;
@@ -62,17 +65,20 @@ public class UserService {
         return ("User deleted sucessfully!");
     }
 
-    public String definirHorario(UserDto dto, Long scheduleId) {
-        Agendamento schedule = agendamentoRepo.findById(scheduleId)
+    public String definirHorario(ScheduleRequest request) {
+        Agendamento schedule = agendamentoRepo.findById(request.getId())
                 .orElseThrow(() -> new RuntimeException("The schedule could not be found!"));
 
-        if (!schedule.isAtiva() || schedule.isDisponivel()) {
+        if (!schedule.isAtiva() || !schedule.isDisponivel()) {
             throw new RuntimeException("The schedule is not available!");
         }
 
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication();
+
         schedule.setDisponivel(false);
         schedule.setAtiva(true);
-        schedule.setCliente(dto.getUsername());
+        schedule.setCliente(user.getUsername());
+
 
         return ("Your schedule is already setted up!");
     }

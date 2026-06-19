@@ -11,13 +11,6 @@ import server.main.barberweb.model.dtos.register.RegResponse;
 import server.main.barberweb.service.UserService;
 import server.main.barberweb.service.security.AuthService;
 
-/*
- * Controller REST da autenticação.
- *
- * Não colocar lógica de negócio aqui.
- */
-
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor

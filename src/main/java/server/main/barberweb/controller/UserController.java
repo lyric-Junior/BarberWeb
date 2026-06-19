@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.main.barberweb.model.dtos.AgendamentoDto;
+import server.main.barberweb.model.dtos.ScheduleRequest;
 import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.entitys.Servico;
 import server.main.barberweb.repository.ServiceRepository;
@@ -29,8 +30,8 @@ public class UserController {
     private AgendamentoService scheduleService;
 
     @PostMapping("/definirHorario/{id}")
-    public ResponseEntity<?> definirHorario(@PathVariable Long id, @Valid UserDto user) {
-        return ResponseEntity.ok(service.definirHorario(user, id));
+    public ResponseEntity<?> definirHorario(@RequestBody ScheduleRequest request) {
+        return ResponseEntity.ok(service.definirHorario(request));
     }
 
     @PutMapping("/cancelarHorario/{id}")

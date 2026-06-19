@@ -71,20 +71,14 @@ public class AgendamentoService {
     }
 
     public String cadastrarAgendamento(Agendamento body) {
-        boolean exists = repo.existsById(body.getId());
-
-        if (exists) {
-            throw new RuntimeException("The schedule already exists, edit or delete the existing one!");
-        }
 
         Agendamento schedule = new Agendamento();
 
-        schedule.setId(body.getId());
+        schedule.setProfissional(body.getProfissional());
         schedule.setCliente(body.getCliente());
         schedule.setHorario(body.getHorario());
         schedule.setAtiva(body.isAtiva());
         schedule.setDisponivel(body.isDisponivel());
-        schedule.setServicos(body.getServicos());
 
         repo.save(schedule);
 
