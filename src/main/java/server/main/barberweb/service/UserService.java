@@ -2,6 +2,7 @@ package server.main.barberweb.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +15,9 @@ import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.Role;
 import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.AgendamentoRepository;
+import server.main.barberweb.repository.AgendamentoSpecification;
 import server.main.barberweb.repository.UserRepository;
+import server.main.barberweb.repository.UserSpecification;
 
 import java.util.List;
 import java.util.UUID;
@@ -129,6 +132,19 @@ public class UserService {
         response.setMessage("Usuário cadastrado com sucesso!");
 
         return (response);
+    }
+
+    public List<UserDto> listarProfissionais() {
+
+        Specification<User> spec = (root, query, criteriaBuilder) ->
+                criteriaBuilder.conjunction();
+
+            spec = spec.and(
+                    UserSpecification.profissionalEquals("PROFESSIONAL"));
+
+        return userRepo.findAll(spec).stream()
+                .map(this::convertUserDto)
+                .collect(Collectors.toList());
     }
 
     private UserDto convertUserDto(User user) {

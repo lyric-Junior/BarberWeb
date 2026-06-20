@@ -48,4 +48,9 @@ public class UserController {
     public List<Servico> listarServicos() {
         return serviceService.listarServicos();
     }
+
+    @GetMapping("/listarProfissionais")
+    public ResponseEntity<UserDto> listarProfissionais() {
+        return
+    }
 }

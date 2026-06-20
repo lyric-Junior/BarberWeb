@@ -101,7 +101,7 @@ public class SecurityService {
                         .requestMatchers("/developer/**")
                         .hasRole("DEVELOPER")
 
-                        .requestMatchers("/user")
+                        .requestMatchers("/user/**")
                         .hasAnyRole("USER", "DEVELOPER", "ADMIN")
 
                         //Qualquer outro endpoint vai precisar de autenticacao

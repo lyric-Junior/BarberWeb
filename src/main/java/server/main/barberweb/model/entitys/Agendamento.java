@@ -36,9 +36,9 @@ public class Agendamento {
     @Setter
     private String cliente;
 
-    @Getter
-    @Setter
-    private String profissional;
+    @Getter @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User profissional;
 
     @Getter @Setter
     @ManyToMany(fetch = FetchType.LAZY)

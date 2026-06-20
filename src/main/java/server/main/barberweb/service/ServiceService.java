@@ -23,8 +23,6 @@ public class ServiceService {
     }
 
     public String cadastrarServico(Servico servico) {
-        Servico serviceDB = serviceRepository.findByName(servico.getName())
-                .orElseThrow(() -> new RuntimeException("The service already exists!"));
 
         Servico newServico = new Servico();
 
