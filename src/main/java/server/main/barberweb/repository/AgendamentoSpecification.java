@@ -3,6 +3,8 @@ package server.main.barberweb.repository;
 import org.springframework.data.jpa.domain.Specification;
 import server.main.barberweb.model.entitys.Agendamento;
 
+import java.time.LocalTime;
+
 public class AgendamentoSpecification {
 
     public static Specification<Agendamento> clienteContains(String cliente) {
@@ -26,5 +28,11 @@ public class AgendamentoSpecification {
     public static Specification<Agendamento> disponivelEquals(boolean disponivel) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("disponivel"), disponivel);
+    }
+
+    public static Specification<Agendamento> timeEquals(LocalTime time) {
+        return ((root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("horario"), time)
+        );
     }
 }

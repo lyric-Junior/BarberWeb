@@ -15,7 +15,6 @@ import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.Role;
 import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.AgendamentoRepository;
-import server.main.barberweb.repository.AgendamentoSpecification;
 import server.main.barberweb.repository.UserRepository;
 import server.main.barberweb.repository.UserSpecification;
 
@@ -72,16 +71,29 @@ public class UserService {
         Agendamento schedule = agendamentoRepo.findById(request.getId())
                 .orElseThrow(() -> new RuntimeException("The schedule could not be found!"));
 
+
         if (!schedule.isAtiva() || !schedule.isDisponivel()) {
             throw new RuntimeException("The schedule is not available!");
         }
 
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication();
+        UUID userId = (UUID) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User pro = userRepo.findById(request.getProfissional())
+                .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
+
+        if (!pro.getRole().name().matches(Role.PROFESSIONAL.name())) {
+            throw new RuntimeException("The user is not a professional");
+        }
+
+        User userDb = userRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("The user dont exists!"));
 
         schedule.setDisponivel(false);
         schedule.setAtiva(true);
-        schedule.setCliente(user.getUsername());
+        schedule.setCliente(userDb);
+        schedule.setProfissional(pro);
 
+        agendamentoRepo.save(schedule);
 
         return ("Your schedule is already setted up!");
     }
