@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @GetMapping("/listarProfissionais")
-    public ResponseEntity<UserDto> listarProfissionais() {
-        return
+    public ResponseEntity<List<UserDto>> listarProfissionais() {
+        return ResponseEntity.ok(service.listarProfissionais());
     }
 }

@@ -11,8 +11,6 @@ public class AgendamentoDto {
 
     private Long id;
 
-    private String profissional;
-
     private LocalDate data;
 
     private LocalTime horario;

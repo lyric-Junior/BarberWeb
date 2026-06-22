@@ -1,6 +1,7 @@
 package server.main.barberweb.model.entitys;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,19 +23,22 @@ public class Agendamento {
 
     @Getter
     @Setter
+    @NotNull
     @DateTimeFormat
     private LocalTime horario;
 
+    @NotNull
     @Getter @Setter
     private LocalDate data;
 
     @Getter
     @Setter
+    @NotNull
     private boolean disponivel;
 
-    @Getter
-    @Setter
-    private String cliente;
+    @Getter @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User cliente;
 
     @Getter @Setter
     @ManyToOne(fetch = FetchType.LAZY)
@@ -51,5 +55,6 @@ public class Agendamento {
 
     @Getter
     @Setter
+    @NotNull
     private boolean ativa;
 }

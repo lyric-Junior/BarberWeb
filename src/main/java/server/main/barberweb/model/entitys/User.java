@@ -42,4 +42,7 @@ public class User {
     @Getter @Setter
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Getter @Setter
+    private boolean busy;
 }
