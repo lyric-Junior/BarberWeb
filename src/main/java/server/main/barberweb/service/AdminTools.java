@@ -1,7 +1,10 @@
 package server.main.barberweb.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import server.main.barberweb.model.dtos.AgendamentoDto;
+import server.main.barberweb.model.dtos.ScheduleEdit;
 import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.Role;
 import server.main.barberweb.model.entitys.User;
@@ -19,7 +22,7 @@ public class AdminTools {
     @Autowired
     private UserRepository userRepo;
 
-    //Cancelar agendamento
+    @Transactional
     public String cancelarAgendamento(Long id) {
         Agendamento vaga = agendamentoRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("The scheduling was not found!"));
@@ -27,20 +30,31 @@ public class AdminTools {
         return ("The scheduling " + vaga.getId() + " was canceled!");
     }
 
-    public String editarAgendamento(Agendamento body) {
+    @Transactional
+    public String editarAgendamento(ScheduleEdit body) {
         Agendamento vaga = agendamentoRepo.findById(body.getId())
                 .orElseThrow(() -> new RuntimeException("The scheduling was not found!"));
 
-        vaga.setProfissional(body.getProfissional());
-        vaga.setCliente(body.getCliente());
+        User pro = userRepo.findById(body.getProfissional())
+                .orElseThrow(() -> new RuntimeException("The professional was not found!"));
+
+        User customer = userRepo.findById(body.getCliente())
+                        .orElseThrow(() -> new RuntimeException("The customer was not found!"));
+
+        vaga.setProfissional(pro);
+        vaga.setCliente(customer);
         vaga.setHorario(body.getHorario());
         vaga.setData(body.getData());
         vaga.setAtiva(body.isAtiva());
         vaga.setDisponivel(body.isDisponivel());
         vaga.setServicos(body.getServicos());
-        return ("The scheduling " + vaga.getId() + " was updated!");
+
+        agendamentoRepo.save(vaga);
+
+        return ("The scheduling " + vaga.getId() + " was edited successfully!");
     }
 
+    @Transactional
     public String tornarDisponivel(Long id) {
         Agendamento vaga = agendamentoRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("The scheduling could not be found!"));
@@ -50,6 +64,7 @@ public class AdminTools {
         return  ("The scheduling " + vaga.getId() + " is now open!");
     }
 
+    @Transactional
     public String tornarProfissional(UUID id) {
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("The user could not be found!"));

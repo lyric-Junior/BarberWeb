@@ -1,9 +1,11 @@
 package server.main.barberweb.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.AgendamentoDto;
+import server.main.barberweb.model.dtos.ScheduleRegister;
 import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.User;
@@ -76,21 +78,22 @@ public class AgendamentoService {
                 .collect(Collectors.toList());
     }
 
-    public String cadastrarAgendamento(Agendamento body) {
+    @Transactional
+    public String cadastrarAgendamento(ScheduleRegister body) {
 
         Agendamento schedule = new Agendamento();
 
-        schedule.setProfissional(body.getProfissional());
-        schedule.setCliente(body.getCliente());
-        schedule.setHorario(body.getHorario());
         schedule.setAtiva(body.isAtiva());
         schedule.setDisponivel(body.isDisponivel());
+        schedule.setData(body.getData());
+        schedule.setHorario(body.getHorario());
 
         repo.save(schedule);
 
         return ("The scheduling " + schedule.getId() + " has been registered!");
     }
 
+    @Transactional
     public String deletarAgendamento(Long id) {
         repo.deleteById(id);
         return ("The schedule" + id + " has been deleted!");

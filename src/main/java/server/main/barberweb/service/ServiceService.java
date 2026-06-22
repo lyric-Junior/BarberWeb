@@ -1,5 +1,6 @@
 package server.main.barberweb.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.entitys.Servico;
@@ -17,11 +18,13 @@ public class ServiceService {
         return serviceRepository.findAll();
     }
 
-    public String deletarServico(int id) {
+    @Transactional
+    public String deletarServico(Integer id) {
         serviceRepository.deleteById(id);
         return ("Service deleted sucessfully!");
     }
 
+    @Transactional
     public String cadastrarServico(Servico servico) {
 
         Servico newServico = new Servico();

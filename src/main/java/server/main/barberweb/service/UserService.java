@@ -1,6 +1,8 @@
 package server.main.barberweb.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,7 @@ import server.main.barberweb.repository.AgendamentoRepository;
 import server.main.barberweb.repository.UserRepository;
 import server.main.barberweb.repository.UserSpecification;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,13 +39,13 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     //USERS SECTION
-
     public List<UserDto> listarUsuarios() {
         return userRepo.findAll().stream()
                 .map(this::convertUserDto)
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public String editarUsuario(UserDto dto) {
         User user = userRepo.findById(dto.getId())
                 .orElseThrow(() -> new RuntimeException("The user could not be found!"));
@@ -57,6 +60,7 @@ public class UserService {
         return ("The user was edited successfully!");
     }
 
+    @Transactional
     public String deletarUsuario(UUID id) {
         userRepo.findById(id)
                 .orElseThrow(
@@ -67,37 +71,39 @@ public class UserService {
         return ("User deleted sucessfully!");
     }
 
+    @Transactional
     public String definirHorario(ScheduleRequest request) {
-        Agendamento schedule = agendamentoRepo.findById(request.getId())
-                .orElseThrow(() -> new RuntimeException("The schedule could not be found!"));
 
+        Agendamento schedule = agendamentoRepo.findById(request.getId())
+                        .orElseThrow(() -> new RuntimeException("The schedule could not be found!"));
 
         if (!schedule.isAtiva() || !schedule.isDisponivel()) {
-            throw new RuntimeException("The schedule is not available!");
+            throw new RuntimeException("The schedule is not available");
         }
 
-        UUID userId = (UUID) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (schedule.getHorario().isBefore(LocalTime.now())) {
+            throw new RuntimeException("The schedule is no more available!");
+        }
+
+        UUID id = (UUID) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User customer = userRepo.findById(id)
+                        .orElseThrow(() -> new RuntimeException("The user could not be found!"));
 
         User pro = userRepo.findById(request.getProfissional())
-                .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
-
-        if (!pro.getRole().name().matches(Role.PROFESSIONAL.name())) {
-            throw new RuntimeException("The user is not a professional");
-        }
-
-        User userDb = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("The user dont exists!"));
+                .orElseThrow(() -> new RuntimeException("The professional doesn't exists!"));
 
         schedule.setDisponivel(false);
-        schedule.setAtiva(true);
-        schedule.setCliente(userDb);
         schedule.setProfissional(pro);
+        schedule.setCliente(customer);
+        schedule.setServicos(request.getServicos());
 
         agendamentoRepo.save(schedule);
 
         return ("Your schedule is already setted up!");
     }
 
+    @Transactional
     public String cancelarHorario(Long id) {
         Agendamento agendamento = agendamentoRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("the schedule could not be found!"));
@@ -111,7 +117,7 @@ public class UserService {
     }
 
 
-
+    @Transactional
     public RegResponse cadastrarUsuario(RegRequest request) {
         //Verificar se o usuário ja existe
         User userStored = userRepo.findOneByUsername(request.getUsername());

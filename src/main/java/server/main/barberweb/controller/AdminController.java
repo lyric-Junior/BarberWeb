@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.main.barberweb.model.dtos.ScheduleEdit;
+import server.main.barberweb.model.dtos.ScheduleRegister;
 import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.Servico;
@@ -67,7 +69,7 @@ public class AdminController {
     }
 
     @PutMapping("/editarAgendamento")
-    public ResponseEntity<?> editarAgendamento(@RequestBody Agendamento body) {
+    public ResponseEntity<?> editarAgendamento(@RequestBody ScheduleEdit body) {
         return ResponseEntity.ok(adminTools.editarAgendamento(body));
     }
 
@@ -77,7 +79,7 @@ public class AdminController {
     }
 
     @PostMapping("/criarAgendamento")
-    public ResponseEntity<String> criarAgendamento(@RequestBody Agendamento schedule) {
+    public ResponseEntity<String> criarAgendamento(@RequestBody ScheduleRegister schedule) {
         return ResponseEntity.ok(scheduleService.cadastrarAgendamento(schedule));
     }
 
@@ -91,5 +93,10 @@ public class AdminController {
     @PostMapping("/cadastrarServico")
     public ResponseEntity<String> cadastrarServico(@Valid @RequestBody Servico service) {
         return ResponseEntity.ok(serviceService.cadastrarServico(service));
+    }
+
+    @PostMapping("/tornarProfissional")
+    public ResponseEntity<String> tornarProfissional(@RequestParam UUID id) {
+        return ResponseEntity.ok(adminTools.tornarProfissional(id));
     }
 }

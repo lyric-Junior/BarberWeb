@@ -31,10 +31,7 @@ public class AuthService {
     @Autowired
     private UserRepository userRepo;
 
-
-     // Flux
-    // de login.
-
+    //Login logic
     public LoginResponse login(LoginRequest request) {
 
         User user =  userRepo.findByEmail(request.getEmail())
