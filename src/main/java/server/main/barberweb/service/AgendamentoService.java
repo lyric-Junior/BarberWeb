@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.AgendamentoDto;
+import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
+import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.AgendamentoRepository;
 import server.main.barberweb.repository.AgendamentoSpecification;
+import server.main.barberweb.repository.UserRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +19,9 @@ public class AgendamentoService {
 
     @Autowired
     private AgendamentoRepository repo;
+
+    @Autowired
+    private UserRepository userRepo;
 
     public List<Agendamento> listarAgendamentos() {
         return repo.findAll();
@@ -93,10 +99,26 @@ public class AgendamentoService {
     private AgendamentoDto convertAgendamentoDto(Agendamento agendamento) {
         AgendamentoDto dto = new AgendamentoDto();
 
+        User pro = userRepo.findById(agendamento.getProfissional().getId())
+                .orElseThrow(() -> new RuntimeException("Professional not found!"));
+
         dto.setId(agendamento.getId());
         dto.setData(agendamento.getData());
         dto.setHorario(agendamento.getHorario());
-        dto.setProfissional(agendamento.getProfissional());
+        dto.setProfissional(converUserDto(pro));
+
+        return dto;
+    }
+
+    private UserDto converUserDto(User user) {
+        UserDto dto = new UserDto();
+
+        dto.setId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setUsername(user.getUsername());
+        dto.setNumero(user.getNumero());
+        dto.setRole(user.getRole());
+
         return dto;
     }
 
