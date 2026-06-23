@@ -44,7 +44,7 @@ public class AdminController {
     }
 
     @PutMapping("/editarUsuario")
-    public ResponseEntity<String> editarUsuario(@RequestBody UserDto user) {
+    public ResponseEntity<String> editarUsuario(@Valid @RequestBody UserDto user) {
         return ResponseEntity.ok(userService.editarUsuario(user));
     }
 
@@ -69,7 +69,7 @@ public class AdminController {
     }
 
     @PutMapping("/editarAgendamento")
-    public ResponseEntity<?> editarAgendamento(@RequestBody ScheduleEdit body) {
+    public ResponseEntity<?> editarAgendamento(@Valid @RequestBody ScheduleEdit body) {
         return ResponseEntity.ok(adminTools.editarAgendamento(body));
     }
 
@@ -79,7 +79,7 @@ public class AdminController {
     }
 
     @PostMapping("/criarAgendamento")
-    public ResponseEntity<String> criarAgendamento(@RequestBody ScheduleRegister schedule) {
+    public ResponseEntity<String> criarAgendamento(@Valid @RequestBody ScheduleRegister schedule) {
         return ResponseEntity.ok(scheduleService.cadastrarAgendamento(schedule));
     }
 

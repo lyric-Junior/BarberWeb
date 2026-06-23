@@ -14,6 +14,8 @@ import server.main.barberweb.service.AgendamentoService;
 import server.main.barberweb.service.ServiceService;
 import server.main.barberweb.service.UserService;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -49,8 +51,18 @@ public class UserController {
         return serviceService.listarServicos();
     }
 
+    @GetMapping("/listarHorariosDisponiveis")
+    public ResponseEntity<List<LocalTime>> listarHorariosDisponiveis() {
+        return ResponseEntity.ok(service.listarHorariosDisponiveis());
+    }
+
     @GetMapping("/listarProfissionais")
     public ResponseEntity<List<UserDto>> listarProfissionais() {
         return ResponseEntity.ok(service.listarProfissionais());
+    }
+
+    @GetMapping("/listarPorHorario")
+    public ResponseEntity<List<AgendamentoDto>> listarPorHorario(@Valid @RequestParam LocalTime horario, @Valid @RequestParam LocalDate data) {
+        return ResponseEntity.ok(scheduleService.listarPorHorario(data, horario));
     }
 }

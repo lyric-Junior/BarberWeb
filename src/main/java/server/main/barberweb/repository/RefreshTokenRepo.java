@@ -11,7 +11,6 @@ import java.util.UUID;
 @Repository
 public interface RefreshTokenRepo
 extends JpaRepository<RefreshToken, String> {
-    RefreshToken findByToken(String token);
 
     @Modifying
     @Query("""

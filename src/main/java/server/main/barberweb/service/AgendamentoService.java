@@ -13,6 +13,8 @@ import server.main.barberweb.repository.AgendamentoRepository;
 import server.main.barberweb.repository.AgendamentoSpecification;
 import server.main.barberweb.repository.UserRepository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,6 +80,11 @@ public class AgendamentoService {
                 .collect(Collectors.toList());
     }
 
+    public List<AgendamentoDto> listarPorHorario(LocalDate data, LocalTime horario) {
+        return repo.findByDataAndHorarioAndDisponivelTrue(data, horario)
+                .stream().map(this::convertAgendamentoDto).collect(Collectors.toList());
+    }
+
     @Transactional
     public String cadastrarAgendamento(ScheduleRegister body) {
 
@@ -102,13 +109,16 @@ public class AgendamentoService {
     private AgendamentoDto convertAgendamentoDto(Agendamento agendamento) {
         AgendamentoDto dto = new AgendamentoDto();
 
-        User pro = userRepo.findById(agendamento.getProfissional().getId())
-                .orElseThrow(() -> new RuntimeException("Professional not found!"));
+        if (agendamento.getProfissional() != null) {
+            User pro = userRepo.findById(agendamento.getProfissional().getId())
+                    .orElseThrow(() -> new RuntimeException("Professional not found!"));
+
+            dto.setProfissional(converUserDto(pro));
+        }
 
         dto.setId(agendamento.getId());
         dto.setData(agendamento.getData());
         dto.setHorario(agendamento.getHorario());
-        dto.setProfissional(converUserDto(pro));
 
         return dto;
     }

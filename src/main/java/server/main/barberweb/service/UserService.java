@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import server.main.barberweb.model.dtos.AgendamentoDto;
 import server.main.barberweb.model.dtos.ScheduleRequest;
 import server.main.barberweb.model.dtos.UserDto;
 import server.main.barberweb.model.dtos.register.RegRequest;
@@ -20,6 +21,7 @@ import server.main.barberweb.repository.AgendamentoRepository;
 import server.main.barberweb.repository.UserRepository;
 import server.main.barberweb.repository.UserSpecification;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
@@ -43,6 +45,10 @@ public class UserService {
         return userRepo.findAll().stream()
                 .map(this::convertUserDto)
                 .collect(Collectors.toList());
+    }
+
+    public List<LocalTime> listarHorariosDisponiveis() {
+        return agendamentoRepo.findHorariosDisponiveis(LocalDate.now());
     }
 
     @Transactional
@@ -112,6 +118,7 @@ public class UserService {
         agendamento.setAtiva(true);
         agendamento.setServicos(null);
         agendamento.setCliente(null);
+        agendamento.setProfissional(null);
 
         return ("The appointment is cancelled!");
     }

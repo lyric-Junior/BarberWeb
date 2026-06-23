@@ -2,6 +2,7 @@ package server.main.barberweb.service.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.entitys.RefreshToken;
 import server.main.barberweb.repository.RefreshTokenRepo;
@@ -57,17 +58,19 @@ public class RefreshTokenService {
     //Funcao para tornar token como utilizado
     public void markAsUsed(String token) {
 
-        boolean isUsed = refreshRepo.findByToken(token).isUsed();
+        RefreshToken obj = refreshRepo.findById(token)
+                .orElseThrow(() -> new BadCredentialsException("Bad credentials!"));
 
-        if (isUsed) {
+        if (obj.isUsed()) {
             throw new RuntimeException(
-                    "Refresh token already used");
+                    "Bad credentials!");
         }
     }
 
     //Revogando token
     public void revokeToken(String token) {
-        RefreshToken obj = refreshRepo.findByToken(token);
+        RefreshToken obj = refreshRepo.findById(token)
+                .orElseThrow(() -> new RuntimeException("Bad credentials!"));
 
         obj.setRevoked(true);
         refreshRepo.save(obj);
@@ -81,7 +84,8 @@ public class RefreshTokenService {
     }
 
     public void validateReplayAttack(String token) {
-        RefreshToken obj = refreshRepo.findByToken(token);
+        RefreshToken obj = refreshRepo.findById(token)
+                .orElseThrow(() -> new BadCredentialsException("Bad credentials!"));
 
         if (obj.isUsed()) {
             detectReplay(obj);

@@ -13,6 +13,8 @@ import server.main.barberweb.repository.RefreshTokenRepo;
 import server.main.barberweb.repository.UserRepository;
 import server.main.barberweb.service.security.jwt.JwtService;
 
+import java.time.Instant;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -80,17 +82,15 @@ public class AuthService {
     // Fluxo para o refreshToken
     public LoginResponse refresh(String refreshToken) {
 
-        RefreshToken refreshToken1 = refreshRepo.findByToken(refreshToken);
-
-        if (refreshToken1 == null) {
-            throw new BadCredentialsException("Bad credentials");
-        }
+        RefreshToken refreshToken1 = refreshRepo.findById(refreshToken)
+                .orElseThrow(() -> new BadCredentialsException("Bad credentials!"));
 
         //Validar replay
         refreshTokenService.validateReplayAttack(refreshToken);
 
         // Validar expiração
         refreshTokenService.isExpired(refreshToken1.getExpiresAt());
+
         // Invalidar token antigo
         refreshToken1.setUsed(true);
 
@@ -110,11 +110,12 @@ public class AuthService {
         obj.setUsed(false);
         obj.setUser(refreshToken1.getUser());
 
-
         //Persistir
         refreshTokenService.saveRefreshToken(obj);
         refreshTokenService.revokeToken(refreshToken1.getToken());
+
         //Persistir novo refreshToken
+        refreshTokenService.saveRefreshToken(refreshToken1);
 
         LoginResponse response = new LoginResponse();
 
