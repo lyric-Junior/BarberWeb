@@ -6,13 +6,21 @@ import org.springframework.data.jpa.repository.Query;
 import server.main.barberweb.model.entitys.Agendamento;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 public interface AgendamentoRepository
 extends JpaRepository<Agendamento, Long>, JpaSpecificationExecutor<Agendamento> {
 
     List<Agendamento> findByDataAndHorarioAndDisponivelTrue(
+            LocalDate data,
+            LocalTime horario
+    );
+
+    boolean existsByProfissionalIdAndDataAndHorario(
+            UUID profissionalId,
             LocalDate data,
             LocalTime horario
     );

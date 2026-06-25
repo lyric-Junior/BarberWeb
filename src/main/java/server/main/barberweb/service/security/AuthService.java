@@ -74,6 +74,7 @@ public class AuthService {
         response.setEmail(user.getEmail());
         response.setUsername(user.getUsername());
         response.setNumero(user.getNumero());
+        response.setUserId(user.getId());
         // Retornar resposta
 
         return response;

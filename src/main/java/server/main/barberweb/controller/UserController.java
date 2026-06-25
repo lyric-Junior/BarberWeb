@@ -5,11 +5,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.main.barberweb.model.dtos.AgendamentoDto;
-import server.main.barberweb.model.dtos.ScheduleRequest;
-import server.main.barberweb.model.dtos.UserDto;
+import server.main.barberweb.model.dtos.agendamento.AgendamentoDto;
+import server.main.barberweb.model.dtos.agendamento.ScheduleRequest;
+import server.main.barberweb.model.dtos.user.UserDto;
 import server.main.barberweb.model.entitys.Servico;
-import server.main.barberweb.repository.ServiceRepository;
 import server.main.barberweb.service.AgendamentoService;
 import server.main.barberweb.service.ServiceService;
 import server.main.barberweb.service.UserService;
@@ -41,10 +40,10 @@ public class UserController {
         return ResponseEntity.ok(service.cancelarHorario(id));
     }
 
-    @GetMapping("/listarParaMim")
-    public List<AgendamentoDto> listarParaMim() {
-        return scheduleService.listarParaMim();
-    }
+//    @GetMapping("/listarParaMim")
+//    public List<AgendamentoDto> listarParaMim() {
+//        return scheduleService.listarParaMim();
+//    }
 
     @GetMapping("/listarServicos")
     public List<Servico> listarServicos() {
@@ -52,13 +51,13 @@ public class UserController {
     }
 
     @GetMapping("/listarHorariosDisponiveis")
-    public ResponseEntity<List<LocalTime>> listarHorariosDisponiveis() {
-        return ResponseEntity.ok(service.listarHorariosDisponiveis());
+    public ResponseEntity<List<LocalTime>> listarHorariosDisponiveis(@RequestParam @Valid LocalDate data) {
+        return ResponseEntity.ok(service.listarHorariosDisponiveis(data));
     }
 
     @GetMapping("/listarProfissionais")
-    public ResponseEntity<List<UserDto>> listarProfissionais() {
-        return ResponseEntity.ok(service.listarProfissionais());
+    public ResponseEntity<List<UserDto>> listarProfissionais(LocalDate data, LocalTime horario) {
+        return ResponseEntity.ok(service.listarProfissionais(data, horario));
     }
 
     @GetMapping("/listarPorHorario")

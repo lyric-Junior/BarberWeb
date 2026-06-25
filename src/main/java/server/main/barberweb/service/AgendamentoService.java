@@ -4,9 +4,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import server.main.barberweb.model.dtos.AgendamentoDto;
-import server.main.barberweb.model.dtos.ScheduleRegister;
-import server.main.barberweb.model.dtos.UserDto;
+import server.main.barberweb.model.dtos.agendamento.AgendamentoDto;
+import server.main.barberweb.model.dtos.agendamento.ScheduleRegister;
+import server.main.barberweb.model.dtos.user.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.AgendamentoRepository;
@@ -64,21 +64,23 @@ public class AgendamentoService {
         return repo.findAll(spec);
     }
 
-    //Lista para cliente
-    public List<AgendamentoDto> listarParaMim() {
+    //Função extra não admitida dentro do sistema
 
-        Specification<Agendamento> spec = (root, query, criteriaBuilder) ->
-                criteriaBuilder.conjunction();
-
-        spec.and(
-                AgendamentoSpecification.disponivelEquals(true)
-        );
-
-
-        return repo.findAll(spec).stream()
-                .map(this::convertAgendamentoDto)
-                .collect(Collectors.toList());
-    }
+//    //Lista para cliente
+//    public List<AgendamentoDto> listarParaMim() {
+//
+//        Specification<Agendamento> spec = (root, query, criteriaBuilder) ->
+//                criteriaBuilder.conjunction();
+//
+//        spec.and(
+//                AgendamentoSpecification.disponivelEquals(true)
+//        );
+//
+//
+//        return repo.findAll(spec).stream()
+//                .map(this::convertAgendamentoDto)
+//                .collect(Collectors.toList());
+//    }
 
     public List<AgendamentoDto> listarPorHorario(LocalDate data, LocalTime horario) {
         return repo.findByDataAndHorarioAndDisponivelTrue(data, horario)

@@ -1,10 +1,8 @@
-package server.main.barberweb.model.dtos;
+package server.main.barberweb.model.dtos.agendamento;
 
 import lombok.Getter;
 import lombok.Setter;
-import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.Servico;
-import server.main.barberweb.model.entitys.User;
 
 import java.util.Set;
 import java.util.UUID;

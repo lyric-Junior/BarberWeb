@@ -2,16 +2,13 @@ package server.main.barberweb.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import server.main.barberweb.model.dtos.AgendamentoDto;
-import server.main.barberweb.model.dtos.ScheduleRequest;
-import server.main.barberweb.model.dtos.UserDto;
+import server.main.barberweb.model.dtos.agendamento.ScheduleRequest;
+import server.main.barberweb.model.dtos.user.UserDto;
 import server.main.barberweb.model.dtos.register.RegRequest;
 import server.main.barberweb.model.dtos.register.RegResponse;
 import server.main.barberweb.model.entitys.Agendamento;
@@ -47,8 +44,8 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public List<LocalTime> listarHorariosDisponiveis() {
-        return agendamentoRepo.findHorariosDisponiveis(LocalDate.now());
+    public List<LocalTime> listarHorariosDisponiveis(LocalDate data) {
+        return agendamentoRepo.findHorariosDisponiveis(data);
     }
 
     @Transactional
@@ -81,14 +78,24 @@ public class UserService {
     public String definirHorario(ScheduleRequest request) {
 
         Agendamento schedule = agendamentoRepo.findById(request.getId())
-                        .orElseThrow(() -> new RuntimeException("The schedule could not be found!"));
+                        .orElseThrow(() -> new RuntimeException("The appointment could not be found!"));
 
         if (!schedule.isAtiva() || !schedule.isDisponivel()) {
-            throw new RuntimeException("The schedule is not available");
+            throw new RuntimeException("The appointment is not available");
         }
 
         if (schedule.getHorario().isBefore(LocalTime.now())) {
-            throw new RuntimeException("The schedule is no more available!");
+            throw new RuntimeException("The appointment is no more available!");
+        }
+
+        boolean indisponivel = agendamentoRepo.existsByProfissionalIdAndDataAndHorario(
+                schedule.getProfissional().getId(),
+                schedule.getData(),
+                schedule.getHorario()
+        );
+
+        if (indisponivel) {
+            throw new  RuntimeException("Good try!");
         }
 
         UUID id = (UUID) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -106,13 +113,13 @@ public class UserService {
 
         agendamentoRepo.save(schedule);
 
-        return ("Your schedule is already setted up!");
+        return ("Your appointment is already setted up!");
     }
 
     @Transactional
     public String cancelarHorario(Long id) {
         Agendamento agendamento = agendamentoRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("the schedule could not be found!"));
+                .orElseThrow(() -> new RuntimeException("the appointment could not be found!"));
 
         agendamento.setDisponivel(true);
         agendamento.setAtiva(true);
@@ -152,22 +159,15 @@ public class UserService {
         //Montamos a response
         RegResponse response = new RegResponse();
 
-        response.setRole(user.getRole());
         response.setUsername(user.getUsername());
-        response.setMessage("Usuário cadastrado com sucesso!");
+        response.setMessage("User registered successfully!");
 
         return (response);
     }
 
-    public List<UserDto> listarProfissionais() {
+    public List<UserDto> listarProfissionais(LocalDate data, LocalTime horario) {
 
-        Specification<User> spec = (root, query, criteriaBuilder) ->
-                criteriaBuilder.conjunction();
-
-            spec = spec.and(
-                    UserSpecification.profissionalEquals("PROFESSIONAL"));
-
-        return userRepo.findAll(spec).stream()
+        return userRepo.buscarProfissionaisDisponiveis(data, horario).stream()
                 .map(this::convertUserDto)
                 .collect(Collectors.toList());
     }

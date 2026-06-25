@@ -1,7 +1,8 @@
-package server.main.barberweb.model.dtos;
+package server.main.barberweb.model.dtos.agendamento;
 
 import lombok.Getter;
 import lombok.Setter;
+import server.main.barberweb.model.dtos.user.UserDto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

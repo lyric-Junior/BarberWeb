@@ -4,6 +4,8 @@ package server.main.barberweb.model.dtos.login;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter @Setter
 public class LoginResponse {
 
@@ -16,4 +18,6 @@ public class LoginResponse {
     private String email;
 
     private String numero;
+
+    private UUID userId;
 }

@@ -1,4 +1,4 @@
-package server.main.barberweb.model.dtos;
+package server.main.barberweb.model.dtos.agendamento;
 
 import lombok.Getter;
 import lombok.Setter;
