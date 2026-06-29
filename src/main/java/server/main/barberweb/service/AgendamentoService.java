@@ -64,6 +64,15 @@ public class AgendamentoService {
         return repo.findAll(spec);
     }
 
+    public AgendamentoDto findOneSchedule(LocalDate data, LocalTime horario)  {
+        Agendamento appointment = repo.findOneAgendamentoByDateAndTime(data, horario)
+                .stream()
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("Appointment not found!"));
+
+        return convertAgendamentoDto(appointment);
+    }
+
     //Função extra não admitida dentro do sistema
 
 //    //Lista para cliente
@@ -81,11 +90,6 @@ public class AgendamentoService {
 //                .map(this::convertAgendamentoDto)
 //                .collect(Collectors.toList());
 //    }
-
-    public List<AgendamentoDto> listarPorHorario(LocalDate data, LocalTime horario) {
-        return repo.findByDataAndHorarioAndDisponivelTrue(data, horario)
-                .stream().map(this::convertAgendamentoDto).collect(Collectors.toList());
-    }
 
     @Transactional
     public String cadastrarAgendamento(ScheduleRegister body) {

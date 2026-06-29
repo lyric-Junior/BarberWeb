@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import server.main.barberweb.model.dtos.agendamento.AgendamentoDto;
 import server.main.barberweb.model.dtos.agendamento.ScheduleRequest;
 import server.main.barberweb.model.dtos.user.UserDto;
+import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.Servico;
 import server.main.barberweb.service.AgendamentoService;
 import server.main.barberweb.service.ServiceService;
@@ -61,7 +62,7 @@ public class UserController {
     }
 
     @GetMapping("/listarPorHorario")
-    public ResponseEntity<List<AgendamentoDto>> listarPorHorario(@Valid @RequestParam LocalTime horario, @Valid @RequestParam LocalDate data) {
-        return ResponseEntity.ok(scheduleService.listarPorHorario(data, horario));
+    public ResponseEntity<AgendamentoDto> listarPorHorario(@Valid @RequestParam LocalTime horario, @Valid @RequestParam LocalDate data) {
+        return ResponseEntity.ok(scheduleService.findOneSchedule(data, horario));
     }
 }

@@ -14,10 +14,14 @@ import java.util.UUID;
 public interface AgendamentoRepository
 extends JpaRepository<Agendamento, Long>, JpaSpecificationExecutor<Agendamento> {
 
-    List<Agendamento> findByDataAndHorarioAndDisponivelTrue(
-            LocalDate data,
-            LocalTime horario
-    );
+    @Query("""
+    SELECT a
+    FROM Agendamento a
+    WHERE a.data = :data
+      AND a.horario = :horario
+      AND a.disponivel = true
+""")
+    List<Agendamento> findOneAgendamentoByDateAndTime(LocalDate data, LocalTime horario);
 
     boolean existsByProfissionalIdAndDataAndHorario(
             UUID profissionalId,

@@ -27,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityService {
 
-    @Value("http://localhost:3000")
+    @Value("http://localhost:5173")
     private String corsOrigins;
 
     @Autowired
