@@ -2,9 +2,10 @@ package server.main.barberweb.model.entitys;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,10 +21,12 @@ public class AgendamentosConcluidos {
 
     @Getter
     @Setter
-    @DateTimeFormat
+    @NotNull
+    @NotBlank
     private LocalTime horario;
 
     @Getter @Setter
+    @NotNull @NotBlank
     private LocalDate data;
 
     @Getter

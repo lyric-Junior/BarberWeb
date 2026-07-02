@@ -1,8 +1,7 @@
 package server.main.barberweb.model.entitys;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,10 +22,12 @@ public class User {
 
     @Getter @Setter
     @Size(max = 20)
+    @NotNull @NotBlank
     private String username;
 
     @Getter @Setter
     @Size(min = 8)
+    @NotNull @NotBlank
     private String password;
 
     @Getter @Setter
@@ -38,6 +39,7 @@ public class User {
 
     @Getter @Setter
     @Email
+    @NotNull @NotBlank
     private String email;
 
     @Getter @Setter

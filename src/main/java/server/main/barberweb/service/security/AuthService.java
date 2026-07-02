@@ -122,6 +122,10 @@ public class AuthService {
 
         response.setAccessToken(jwtService.generateAccessToken(user.getId(), user.getRole().name()));
         response.setRefreshToken(refreshToken2);
+        response.setUserId(user.getId());
+        response.setEmail(user.getEmail());
+        response.setUsername(user.getUsername());
+        response.setNumero(user.getNumero());
 
         return response;
     }

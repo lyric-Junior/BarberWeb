@@ -2,6 +2,7 @@ package server.main.barberweb.model.entitys;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,12 +25,13 @@ public class Agendamento {
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull @NotBlank
     @DateTimeFormat
     private LocalTime horario;
 
     @NotNull
     @Getter @Setter
+    @NotNull @NotBlank
     private LocalDate data;
 
     @Getter

@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.agendamento.ScheduleRequest;
+import server.main.barberweb.model.dtos.user.ProfissionalDto;
 import server.main.barberweb.model.dtos.user.UserDto;
 import server.main.barberweb.model.dtos.register.RegRequest;
 import server.main.barberweb.model.dtos.register.RegResponse;
@@ -46,7 +47,9 @@ public class UserService {
     }
 
     public List<LocalTime> listarHorariosDisponiveis(LocalDate data) {
-        return agendamentoRepo.findHorariosDisponiveis(data);
+        return agendamentoRepo.findHorariosDisponiveis(data).stream()
+                .filter(horario -> horario.isAfter(LocalTime.now()))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -166,10 +169,10 @@ public class UserService {
         return (response);
     }
 
-    public List<UserDto> listarProfissionais(LocalDate data, LocalTime horario) {
+    public List<ProfissionalDto> listarProfissionais(LocalDate data, LocalTime horario) {
 
         return userRepo.buscarProfissionaisDisponiveis(data, horario).stream()
-                .map(this::convertUserDto)
+                .map(this::convertUserProfissional)
                 .collect(Collectors.toList());
     }
 
@@ -181,6 +184,16 @@ public class UserService {
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setRole(user.getRole());
+
+        return dto;
+    }
+
+    private ProfissionalDto convertUserProfissional(User user) {
+        ProfissionalDto dto = new ProfissionalDto();
+
+        dto.setFoto(user.getFoto());
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
 
         return dto;
     }

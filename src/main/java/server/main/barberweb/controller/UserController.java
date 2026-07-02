@@ -7,8 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.main.barberweb.model.dtos.agendamento.AgendamentoDto;
 import server.main.barberweb.model.dtos.agendamento.ScheduleRequest;
-import server.main.barberweb.model.dtos.user.UserDto;
-import server.main.barberweb.model.entitys.Agendamento;
+import server.main.barberweb.model.dtos.user.ProfissionalDto;
 import server.main.barberweb.model.entitys.Servico;
 import server.main.barberweb.service.AgendamentoService;
 import server.main.barberweb.service.ServiceService;
@@ -57,7 +56,7 @@ public class UserController {
     }
 
     @GetMapping("/listarProfissionais")
-    public ResponseEntity<List<UserDto>> listarProfissionais(LocalDate data, LocalTime horario) {
+    public ResponseEntity<List<ProfissionalDto>> listarProfissionais(LocalDate data, LocalTime horario) {
         return ResponseEntity.ok(service.listarProfissionais(data, horario));
     }
 

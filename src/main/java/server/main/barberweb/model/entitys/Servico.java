@@ -1,9 +1,12 @@
 package server.main.barberweb.model.entitys;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,13 +20,17 @@ public class Servico {
     private int id;
 
     @Getter @Setter
+    @NotNull
+    @NotBlank
     private String name;
 
     @Getter @Setter
+    @NotNull @NotBlank
     private String descricao;
 
     @Getter @Setter
-    private Double preço;
+    @NotNull @NotBlank
+    private BigDecimal preço;
 
     @Getter @Setter
     @ManyToMany(mappedBy = "servicos")
