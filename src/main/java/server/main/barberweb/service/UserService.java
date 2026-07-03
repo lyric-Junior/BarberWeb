@@ -171,7 +171,8 @@ public class UserService {
 
     public List<ProfissionalDto> listarProfissionais(LocalDate data, LocalTime horario) {
 
-        return userRepo.buscarProfissionaisDisponiveis(data, horario).stream()
+        return userRepo.buscarProfissionaisDisponiveis(Role.PROFESSIONAL, data, horario)
+                .stream()
                 .map(this::convertUserProfissional)
                 .collect(Collectors.toList());
     }

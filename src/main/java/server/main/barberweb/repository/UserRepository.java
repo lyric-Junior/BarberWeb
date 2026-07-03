@@ -3,6 +3,7 @@ package server.main.barberweb.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.Role;
 import server.main.barberweb.model.entitys.User;
@@ -26,17 +27,18 @@ extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
     @Query("""
     SELECT u
     FROM User u
-    WHERE u.role = 'PROFISSIONAL'
-    AND u.id NOT IN (
-        SELECT a.profissional.id
-        FROM Agendamento a
-        WHERE a.data = :data
-        AND a.horario = :horario
-        AND a.profissional IS NOT NULL
-    )
+    WHERE u.role = :role
+      AND NOT EXISTS (
+          SELECT 1
+          FROM Agendamento a
+          WHERE a.profissional = u
+            AND a.data = :data
+            AND a.horario = :horario
+      )
 """)
     List<User> buscarProfissionaisDisponiveis(
-            LocalDate data,
-            LocalTime horario
+            @Param("role") Role role,
+            @Param("data") LocalDate data,
+            @Param("horario") LocalTime horario
     );
 }

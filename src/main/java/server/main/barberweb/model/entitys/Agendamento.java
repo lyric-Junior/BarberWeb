@@ -25,18 +25,16 @@ public class Agendamento {
 
     @Getter
     @Setter
-    @NotNull @NotBlank
+    @NotNull
     @DateTimeFormat
     private LocalTime horario;
 
     @NotNull
     @Getter @Setter
-    @NotNull @NotBlank
     private LocalDate data;
 
     @Getter
     @Setter
-    @NotNull
     private boolean disponivel;
 
     @Getter @Setter
