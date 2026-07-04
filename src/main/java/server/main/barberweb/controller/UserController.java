@@ -30,7 +30,7 @@ public class UserController {
     @Autowired
     private AgendamentoService scheduleService;
 
-    @PostMapping("/definirHorario/{id}")
+    @PostMapping("/definirHorario")
     public ResponseEntity<?> definirHorario(@RequestBody ScheduleRequest request) {
         return ResponseEntity.ok(service.definirHorario(request));
     }
@@ -60,8 +60,8 @@ public class UserController {
         return ResponseEntity.ok(service.listarProfissionais(data, horario));
     }
 
-    @GetMapping("/listarPorHorario")
-    public ResponseEntity<AgendamentoDto> listarPorHorario(@Valid @RequestParam LocalTime horario, @Valid @RequestParam LocalDate data) {
+    @GetMapping("/pickOneAppointment")
+    public ResponseEntity<AgendamentoDto> listarPorHorario(@Valid @RequestParam LocalDate data, @Valid @RequestParam LocalTime horario) {
         return ResponseEntity.ok(scheduleService.findOneSchedule(data, horario));
     }
 }

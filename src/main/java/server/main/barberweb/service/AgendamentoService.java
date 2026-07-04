@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.agendamento.AgendamentoDto;
 import server.main.barberweb.model.dtos.agendamento.ScheduleRegister;
+import server.main.barberweb.model.dtos.user.ProfissionalDto;
 import server.main.barberweb.model.dtos.user.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.User;
@@ -115,16 +116,13 @@ public class AgendamentoService {
     private AgendamentoDto convertAgendamentoDto(Agendamento agendamento) {
         AgendamentoDto dto = new AgendamentoDto();
 
-        if (agendamento.getProfissional() != null) {
-            User pro = userRepo.findById(agendamento.getProfissional().getId())
-                    .orElseThrow(() -> new RuntimeException("Professional not found!"));
-
-            dto.setProfissional(converUserDto(pro));
-        }
+        User pro = userRepo.findById(agendamento.getProfissional().getId())
+                        .orElseThrow(() -> new RuntimeException("The professioanl doesn't exists!"));
 
         dto.setId(agendamento.getId());
         dto.setData(agendamento.getData());
         dto.setHorario(agendamento.getHorario());
+        dto.setProfissional(convertUserProfissional(pro));
 
         return dto;
     }
@@ -137,6 +135,16 @@ public class AgendamentoService {
         dto.setUsername(user.getUsername());
         dto.setNumero(user.getNumero());
         dto.setRole(user.getRole());
+
+        return dto;
+    }
+
+    private ProfissionalDto convertUserProfissional(User user) {
+        ProfissionalDto dto = new ProfissionalDto();
+
+        dto.setFoto(user.getFoto());
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
 
         return dto;
     }
