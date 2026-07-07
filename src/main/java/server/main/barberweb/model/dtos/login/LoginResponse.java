@@ -3,6 +3,7 @@ package server.main.barberweb.model.dtos.login;
 
 import lombok.Getter;
 import lombok.Setter;
+import server.main.barberweb.model.entitys.Role;
 
 import java.util.UUID;
 
@@ -20,4 +21,6 @@ public class LoginResponse {
     private String numero;
 
     private UUID userId;
+
+    private Role role;
 }
