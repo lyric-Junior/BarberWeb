@@ -2,7 +2,6 @@ package server.main.barberweb.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +43,25 @@ public class UserService {
         return userRepo.findAll().stream()
                 .map(this::convertUserDto)
                 .collect(Collectors.toList());
+    }
+
+    public List<UserDto> listarPorFiltro(String username, String email, String cpf) {
+        Specification<User> specification = Specification.unrestricted();
+
+        if (username != null && !username.isBlank()) {
+            specification = specification.and(UserSpecification.usernameContains(username));
+        }
+
+        if (email != null && !email.isBlank()) {
+            specification = specification.and(UserSpecification.emailContains(email));
+        }
+
+        if (cpf != null && !cpf
+                .isBlank()) {
+            specification = specification.and(UserSpecification.cpfContains(cpf));
+        }
+
+        return userRepo.findAll(specification).stream().map(this::convertUserDto).collect(Collectors.toList());
     }
 
     public List<LocalTime> listarHorariosDisponiveis(LocalDate data) {

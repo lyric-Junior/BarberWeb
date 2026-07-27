@@ -38,10 +38,18 @@ public class AdminController {
         return ResponseEntity.ok(userService.listarUsuarios());
     }
 
+    @GetMapping(3+
+            "/listarUsuariosComFiltro")
+    public ResponseEntity<List<UserDto>> listarUsuariosComFiltro(@RequestParam String username, @RequestParam String email, @RequestParam String cpf) {
+        return ResponseEntity.ok(userService.listarPorFiltro(username, email, cpf));
+    }
+
     @GetMapping("/listarAgendamentos")
     public ResponseEntity<?> listarAgendamentos() {
         return ResponseEntity.ok(scheduleService.listarAgendamentos());
     }
+
+    @GetMapping
 
     @PutMapping("/editarUsuario")
     public ResponseEntity<String> editarUsuario(@Valid @RequestBody UserDto user) {
