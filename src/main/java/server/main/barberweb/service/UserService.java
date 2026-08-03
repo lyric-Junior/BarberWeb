@@ -39,6 +39,14 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     //USERS SECTION
+    public UserDto findUserById(UUID id) {
+
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        return convertUserDto(user);
+    }
+
     public List<UserDto> listarUsuarios() {
         return userRepo.findAll().stream()
                 .map(this::convertUserDto)
@@ -156,11 +164,9 @@ public class UserService {
     @Transactional
     public RegResponse cadastrarUsuario(RegRequest request) {
         //Verificar se o usuário ja existe
-        User userStored = userRepo.findOneByUsername(request.getUsername());
+        boolean userStored = userRepo.existsByEmail(request.getEmail());
 
-        //Seguindo essa regra nenhum nome pode ser igual, então tem que ser um nome maior.
-
-        if (userStored != null) {
+        if (userStored) {
             throw new RuntimeException("The user already exists!");
         }
 

@@ -22,6 +22,8 @@ extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
 
     boolean existsByRole(Role role);
 
+    boolean existsByEmail(String email);
+
     Optional<User> findByEmail(String email);
 
     @Query("""

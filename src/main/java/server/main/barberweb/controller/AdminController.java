@@ -33,14 +33,21 @@ public class AdminController {
     @Autowired
     private AdminTools adminTools;
 
+    @GetMapping("/findUserById")
+    public ResponseEntity<UserDto> findUserById(@RequestParam UUID id) {
+        return ResponseEntity.ok(userService.findUserById(id));
+    }
+
     @GetMapping("/listarUsuarios")
     public ResponseEntity<List<UserDto>> listarUsuarios() {
         return ResponseEntity.ok(userService.listarUsuarios());
     }
 
-    @GetMapping(3+
-            "/listarUsuariosComFiltro")
-    public ResponseEntity<List<UserDto>> listarUsuariosComFiltro(@RequestParam String username, @RequestParam String email, @RequestParam String cpf) {
+    @GetMapping("/listarUsuariosComFiltro")
+    public ResponseEntity<List<UserDto>> listarUsuariosComFiltro(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String cpf) {
         return ResponseEntity.ok(userService.listarPorFiltro(username, email, cpf));
     }
 

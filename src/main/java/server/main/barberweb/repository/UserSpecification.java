@@ -5,23 +5,21 @@ import server.main.barberweb.model.entitys.User;
 
 public class UserSpecification {
 
-    public static Specification<User> profissionalEquals(String role) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("role"), role);
-    }
-
     public static Specification<User> usernameContains(String username) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(root.get("username"), username);
+        return (root, query, cb) ->
+                cb.like(cb.lower(root.get("username")),
+                        "%" + username.toLowerCase() + "%");
     }
 
     public static Specification<User> emailContains(String email) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(root.get("email"), email);
+        return (root, query, cb) ->
+                cb.like(cb.lower(root.get("email")),
+                        "%" + email.toLowerCase() + "%");
     }
 
-    public static Specification<User> cpfContains(String cpf){
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(root.get("cpf"), cpf);
+    public static Specification<User> cpfContains(String cpf) {
+        return (root, query, cb) ->
+                cb.like(root.get("cpf"),
+                        "%" + cpf + "%");
     }
 }
