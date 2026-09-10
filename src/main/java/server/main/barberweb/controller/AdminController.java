@@ -1,11 +1,13 @@
 package server.main.barberweb.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.main.barberweb.model.dtos.agendamento.ScheduleEdit;
 import server.main.barberweb.model.dtos.agendamento.ScheduleRegister;
+import server.main.barberweb.model.dtos.user.EditUser;
 import server.main.barberweb.model.dtos.user.UserDto;
 import server.main.barberweb.model.entitys.Agendamento;
 import server.main.barberweb.model.entitys.Servico;
@@ -34,7 +36,7 @@ public class AdminController {
     private AdminTools adminTools;
 
     @GetMapping("/findUserById")
-    public ResponseEntity<UserDto> findUserById(@RequestParam UUID id) {
+    public ResponseEntity<EditUser> findUserById(@RequestParam UUID id) {
         return ResponseEntity.ok(userService.findUserById(id));
     }
 
@@ -113,5 +115,10 @@ public class AdminController {
     @PostMapping("/tornarProfissional")
     public ResponseEntity<String> tornarProfissional(@RequestParam UUID id) {
         return ResponseEntity.ok(adminTools.tornarProfissional(id));
+    }
+
+    @GetMapping("/listScheduleByClient")
+    public ResponseEntity<List<Agendamento>> listScheduleByClient(@NotNull Long id) {
+        return ResponseEntity.ok(adminTools.listarPorCliente(id));
     }
 }

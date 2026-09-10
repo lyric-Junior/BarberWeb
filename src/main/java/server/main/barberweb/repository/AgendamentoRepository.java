@@ -3,6 +3,8 @@ package server.main.barberweb.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import server.main.barberweb.model.dtos.dashboard.LastTimeUsed;
 import server.main.barberweb.model.entitys.Agendamento;
 
 import java.time.LocalDate;
@@ -37,5 +39,25 @@ extends JpaRepository<Agendamento, Long>, JpaSpecificationExecutor<Agendamento> 
     ORDER BY a.horario
 """)
     List<LocalTime> findHorariosDisponiveis(LocalDate data);
+
+    @Query("""
+    SELECT a FROM Agendamento a
+    WHERE a.cliente = :id
+""")
+    List<Agendamento> listarPorCliente(Long id);
+
+    @Query("""
+    SELECT
+        u.id,
+        u.username,
+        MAX(a.data) AS ultimo_agendamento
+    FROM users u
+    INNER JOIN agendamentos a
+        ON a.cliente = u.id
+    GROUP BY
+        u.id,
+        u.username
+""")
+    List<LastTimeUsed> listOlderClients();
 
 }

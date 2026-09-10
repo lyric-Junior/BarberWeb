@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import server.main.barberweb.model.dtos.agendamento.ScheduleRequest;
+import server.main.barberweb.model.dtos.user.EditUser;
 import server.main.barberweb.model.dtos.user.ProfissionalDto;
 import server.main.barberweb.model.dtos.user.UserDto;
 import server.main.barberweb.model.dtos.register.RegRequest;
@@ -26,7 +27,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
     @Autowired
@@ -39,12 +39,12 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     //USERS SECTION
-    public UserDto findUserById(UUID id) {
+    public EditUser findUserById(UUID id) {
 
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
-        return convertUserDto(user);
+        return convertUserEditUser(user);
     }
 
     public List<UserDto> listarUsuarios() {
@@ -208,6 +208,19 @@ public class UserService {
         dto.setNumero(user.getNumero());
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
+        dto.setRole(user.getRole());
+
+        return dto;
+    }
+
+    private EditUser convertUserEditUser(User user) {
+        EditUser dto = new EditUser();
+
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setNumero(user.getNumero());
+        dto.setEmail(user.getEmail());
+        dto.setFoto(user.getFoto());
         dto.setRole(user.getRole());
 
         return dto;

@@ -34,23 +34,21 @@ public class GlobalExceptionHandler {
         error.setTimestamp(LocalDateTime.now());
         error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setError("Erro de negócio");
-        error.setMessage(ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(
-            Exception ex) {
-
-        ErrorResponse error = new ErrorResponse();
-
-        error.setTimestamp(LocalDateTime.now());
-        error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        error.setError("Erro interno do servidor");
-        error.setMessage(ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(error);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorResponse> handleGenericException(
+//            Exception ex) {
+//
+//        ErrorResponse error = new ErrorResponse();
+//
+//        error.setTimestamp(LocalDateTime.now());
+//        error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+//        error.setError("Erro interno do servidor");
+//
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body(error);
+//    }
 }

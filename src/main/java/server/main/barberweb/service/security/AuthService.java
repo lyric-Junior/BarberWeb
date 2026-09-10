@@ -13,7 +13,6 @@ import server.main.barberweb.repository.RefreshTokenRepo;
 import server.main.barberweb.repository.UserRepository;
 import server.main.barberweb.service.security.jwt.JwtService;
 
-import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor

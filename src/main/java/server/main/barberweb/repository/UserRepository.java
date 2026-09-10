@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public interface UserRepository
@@ -43,4 +44,5 @@ extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
             @Param("data") LocalDate data,
             @Param("horario") LocalTime horario
     );
+
 }

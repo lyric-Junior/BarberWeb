@@ -10,6 +10,7 @@ import server.main.barberweb.model.entitys.User;
 import server.main.barberweb.repository.AgendamentoRepository;
 import server.main.barberweb.repository.UserRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -71,5 +72,9 @@ public class AdminTools {
         user.setRole(Role.PROFESSIONAL);
 
         return ("The user " + user.getUsername() + " is now an professional!");
+    }
+
+    public List<Agendamento> listarPorCliente(Long id) {
+        return agendamentoRepo.listarPorCliente(id);
     }
 }

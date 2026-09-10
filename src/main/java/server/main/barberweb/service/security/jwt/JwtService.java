@@ -5,7 +5,6 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -27,7 +26,7 @@ public class JwtService {
      * HS256 exige uma chave suficientemente forte.
      * Recomenda-se pelo menos 256 bits.
      */
-    private String jwtSecret = JWT_SECRET;
+    private final String jwtSecret = JWT_SECRET;
 
     /*
      * Access token curto reduz impacto de vazamento.
