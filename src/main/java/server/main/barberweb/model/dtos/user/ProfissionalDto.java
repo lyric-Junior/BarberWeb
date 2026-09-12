@@ -13,6 +13,6 @@ public class ProfissionalDto {
 
     private UUID id;
 
-    private Blob foto;
+    private byte[] foto;
 
 }

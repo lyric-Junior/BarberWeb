@@ -1,12 +1,13 @@
 package server.main.barberweb.service;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import server.main.barberweb.model.dtos.agendamento.ScheduleRequest;
 import server.main.barberweb.model.dtos.user.EditUser;
 import server.main.barberweb.model.dtos.user.ProfissionalDto;
@@ -20,6 +21,7 @@ import server.main.barberweb.repository.AgendamentoRepository;
 import server.main.barberweb.repository.UserRepository;
 import server.main.barberweb.repository.UserSpecification;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -158,6 +160,32 @@ public class UserService {
         agendamento.setProfissional(null);
 
         return ("The appointment is cancelled!");
+    }
+
+    @Transactional
+    public void atualizarFoto(UUID id, MultipartFile foto) {
+
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new BadCredentialsException("Usuário não encontrado!"));
+
+        if (foto.isEmpty()) {
+            throw new RuntimeException("Nenhuma foto foi enviada");
+        }
+
+        if (!foto.getContentType().startsWith("image/")) {
+            throw new RuntimeException(
+                    "O arquivo enviado deve ser uma imagem"
+            );
+        }
+
+        try {
+            user.setFoto(foto.getBytes());
+            userRepo.save(user);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 

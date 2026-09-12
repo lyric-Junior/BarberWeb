@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import org.hibernate.validator.constraints.br.CPF;
 
-import java.sql.Blob;
 import java.util.UUID;
 
 @Entity
@@ -47,5 +46,7 @@ public class User {
     private Role role;
 
     @Getter @Setter
-    private Blob foto;
+    @Lob
+    @Column(name = "foto", columnDefinition = "LONGBLOB")
+    private byte[] foto;
 }

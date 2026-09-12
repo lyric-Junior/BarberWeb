@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import server.main.barberweb.model.dtos.agendamento.AgendamentoDto;
 import server.main.barberweb.model.dtos.agendamento.ScheduleRequest;
 import server.main.barberweb.model.dtos.user.ProfissionalDto;
@@ -16,6 +17,7 @@ import server.main.barberweb.service.UserService;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -40,11 +42,6 @@ public class UserController {
         return ResponseEntity.ok(service.cancelarHorario(id));
     }
 
-//    @GetMapping("/listarParaMim")
-//    public List<AgendamentoDto> listarParaMim() {
-//        return scheduleService.listarParaMim();
-//    }
-
     @GetMapping("/listarServicos")
     public List<Servico> listarServicos() {
         return serviceService.listarServicos();
@@ -64,4 +61,15 @@ public class UserController {
     public ResponseEntity<AgendamentoDto> listarPorHorario(@Valid @RequestParam LocalDate data, @Valid @RequestParam LocalTime horario) {
         return ResponseEntity.ok(scheduleService.findOneSchedule(data, horario));
     }
+
+    @PutMapping("/atualizarFoto")
+    public ResponseEntity<?> atualizarFoto(
+            UUID id,
+            MultipartFile foto
+    ) {
+        service.atualizarFoto(id, foto);
+
+        return ResponseEntity.ok("A foto foi enviada com sucesso!");
+    }
+
 }

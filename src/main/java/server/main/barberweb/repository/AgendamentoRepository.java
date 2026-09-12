@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import server.main.barberweb.model.dtos.dashboard.LastTimeUsed;
 import server.main.barberweb.model.entitys.Agendamento;
+import server.main.barberweb.model.entitys.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,19 +46,19 @@ extends JpaRepository<Agendamento, Long>, JpaSpecificationExecutor<Agendamento> 
     WHERE a.cliente = :id
 """)
     List<Agendamento> listarPorCliente(Long id);
-
-    @Query("""
-    SELECT
-        u.id,
-        u.username,
-        MAX(a.data) AS ultimo_agendamento
-    FROM users u
-    INNER JOIN agendamentos a
-        ON a.cliente = u.id
-    GROUP BY
-        u.id,
-        u.username
-""")
-    List<LastTimeUsed> listOlderClients();
+//
+//    @Query("""
+//    SELECT
+//        u.id,
+//        u.username,
+//        MAX(a.data) AS ultimo_agendamento
+//    FROM users u
+//    INNER JOIN agendamentos a
+//        ON a.cliente = u.id
+//    GROUP BY
+//        u.id,
+//        u.username
+//""")
+//    List<LastTimeUsed> listOlderClients();
 
 }

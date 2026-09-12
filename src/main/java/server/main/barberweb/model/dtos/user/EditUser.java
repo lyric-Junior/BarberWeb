@@ -18,7 +18,7 @@ public class EditUser {
 
     private String email;
 
-    private Blob foto;
+    private byte[] foto;
 
     private Role role;
 }
