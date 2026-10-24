@@ -2,7 +2,6 @@ package server.main.barberweb.service.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -22,13 +21,14 @@ import server.main.barberweb.service.security.jwt.JwtAuthenticationFilter;
 import java.util.Arrays;
 import java.util.List;
 
+import static server.main.barberweb.config.Config.CORS_ORIGIN;
+
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityService {
 
-    @Value("http://localhost:5173")
-    private String corsOrigins;
+    private static final String corsOrigins = CORS_ORIGIN;
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;

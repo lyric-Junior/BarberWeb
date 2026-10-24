@@ -17,4 +17,5 @@ public class Config {
 
     //JWT
     public static final String JWT_SECRET = dotenv.get("JWT_SECRET");
+    public static final String CORS_ORIGIN = dotenv.get("CORS_ORIGIN");
 }
