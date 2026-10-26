@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -46,7 +48,15 @@ public class User {
     private Role role;
 
     @Getter @Setter
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "usuario_contato",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "contatos_id"))
+    private Set<Contato> contatos = new HashSet<>();
+
+    @Getter @Setter
     @Lob
-    @Column(name = "foto", columnDefinition = "LONGBLOB")
+    @Column(columnDefinition = "LONGBLOB")
     private byte[] foto;
 }
